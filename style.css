@@ -1,0 +1,18 @@
+:root {
+  --board-colour: #1f6e30;
+  --cell-colour: #3dc45a;
+}
+
+#board {
+  display: grid;
+  grid-template-columns: repeat(8, 80px);
+  grid-template-rows: repeat(8, 80px);
+  background-color: var(--board-colour);
+  padding: 2px;
+  width: fit-content;
+}
+
+.cell {
+  background-color: var(--cell-colour);
+  margin: 2px;
+}
