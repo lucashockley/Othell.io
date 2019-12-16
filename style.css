@@ -1,6 +1,10 @@
 :root {
   --board-colour: #1f6e30;
   --cell-colour: #3dc45a;
+  --light-disk-fill: #ffffff;
+  --light-disk-stroke: #dbdbdb;
+  --dark-disk-fill: #292929;
+  --dark-disk-stroke: #1a1a1a;
 }
 
 #board {
@@ -13,6 +17,19 @@
 }
 
 .cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: var(--cell-colour);
   margin: 2px;
+}
+
+.disk-light {
+  fill: var(--light-disk-fill);
+  stroke: var(--light-disk-stroke);
+}
+
+.disk-dark {
+  fill: var(--dark-disk-fill);
+  stroke: var(--dark-disk-stroke);
 }
