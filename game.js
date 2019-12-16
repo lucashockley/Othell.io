@@ -1,7 +1,7 @@
 const darkDisk = '<svg class="disk-dark" width="64" height="64" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>';
 const lightDisk = '<svg class="disk-light" width="64" height="64" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>';
 const darkMove = '<svg class="dark-move" onclick="selectMove()" width="64" height="64" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>';
-const lightMove = '<svg class="light-move" onclick="selectMove()" width="64" height="64" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>';
+const lightMove = '<svg class="light-move" width="64" height="64" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>';
 
 const boardDisplay = document.getElementById('board');
 
@@ -43,6 +43,7 @@ function selectMove() {
       document.body.appendChild(info);
     } else if (getValidMoves(turn * -1).length !== 0) {
       turn *= -1;
+      showValidMoves();
       let validMoves = getValidMoves(turn);
       let AiMove = validMoves[Math.floor(Math.random() * validMoves.length)];
       setTimeout(() => {
