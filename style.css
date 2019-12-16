@@ -24,12 +24,96 @@
   margin: 2px;
 }
 
+.disk-dark {
+  fill: var(--dark-disk-fill);
+  stroke: var(--dark-disk-stroke);
+}
+
 .disk-light {
   fill: var(--light-disk-fill);
   stroke: var(--light-disk-stroke);
 }
 
-.disk-dark {
-  fill: var(--dark-disk-fill);
-  stroke: var(--dark-disk-stroke);
+.flip-dark,
+.flip-light {
+  animation-timing-function: ease-out;
+  animation-duration: 300ms
+}
+
+.flip-dark {
+  animation-name: flip-to-dark;
+}
+
+.flip-light {
+  animation-name: flip-to-light;
+}
+
+@keyframes flip-to-dark {
+
+  from {
+    transform: scale(1, 1);
+  }
+
+  49% {
+    fill: var(--light-disk-fill);
+    stroke: var(--light-disk-stroke);
+  }
+
+  50% {
+    transform: scale(0.25, 1.1);
+    fill: var(--dark-disk-fill);
+    stroke: var(--dark-disk-stroke);
+  }
+
+  to {
+    transform: scale(1, 1);
+    fill: var(--dark-disk-fill);
+    stroke: var(--dark-disk-stroke);
+  }
+}
+
+@keyframes flip-to-light {
+
+  from {
+    transform: scale(1, 1);
+  }
+
+  49% {
+    fill: var(--dark-disk-fill);
+    stroke: var(--dark-disk-stroke);
+  }
+
+  50% {
+    transform: scale(0.25, 1.1);
+    fill: var(--light-disk-fill);
+    stroke: var(--light-disk-stroke);
+  }
+
+  to {
+    transform: scale(1, 1);
+    fill: var(--light-disk-fill);
+    stroke: var(--light-disk-stroke);
+  }
+}
+
+@keyframes place {
+  from {
+    transform: scale(1.2);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+.dark-move {
+  opacity: .3;
+  fill: black;
+  stroke: black;
+}
+
+.light-move {
+  opacity: .5;
+  fill: white;
+  stroke: white;
 }
