@@ -7,10 +7,18 @@
   --dark-disk-stroke: #1a1a1a;
 }
 
+body {
+  background-color: var(--dark-disk-stroke);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 95vh;
+}
+
 #board {
   display: grid;
-  grid-template-columns: repeat(8, 80px);
-  grid-template-rows: repeat(8, 80px);
+  grid-template-columns: repeat(8, 75px);
+  grid-template-rows: repeat(8, 75px);
   background-color: var(--board-colour);
   padding: 2px;
   width: fit-content;
@@ -37,7 +45,7 @@
 .flip-dark,
 .flip-light {
   animation-timing-function: ease-out;
-  animation-duration: 300ms
+  animation-duration: 200ms
 }
 
 .flip-dark {
