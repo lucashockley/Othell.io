@@ -3,13 +3,42 @@
 
 <head>
   <meta charset="UTF-8">
+  <script defer src="settings.js"></script>
   <script defer src="game.js"></script>
   <link rel="stylesheet" href="style.css">
   <title>Othello</title>
 </head>
 
 <body>
-  <div id="board"></div>
+  <div id="controls">
+    <div class="btn" onclick="startNewGame()">Start Game</div>
+    <div id="settings">
+      <div class="setting">
+        <label for="dark-user-type">Dark Player</label>
+        <span class="switch">
+          <input type="checkbox" name="dark-user-type" id="dark-user-type">
+          <span class="switch-option selected" onclick="changeSetting()">Human</span>
+          <span class="switch-option" onclick="changeSetting()">AI</span>
+        </span>
+      </div>
+      <div class="setting">
+        <label for="light-user-type">Light Player</label>
+        <span class="switch">
+          <input type="checkbox" name="light-user-type" id="light-user-type">
+          <span class="switch-option selected" onclick="changeSetting()">Human</span>
+          <span class="switch-option" onclick="changeSetting()">AI</span>
+        </span>
+      </div>
+      <div class="setting">
+        <label for="animate">Disk Animations</label>
+        <span class="switch">
+          <input type="checkbox" name="animate" id="animate">
+          <span class="switch-option selected" onclick="changeSetting()">On</span>
+          <span class="switch-option" onclick="changeSetting()">Off</span>
+        </span>
+      </div>
+    </div>
+    <div id="board"></div>
 </body>
 
 </html>

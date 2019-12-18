@@ -1,6 +1,5 @@
 :root {
-  --board-colour: #1f6e30;
-  --cell-colour: #3dc45a;
+  --grey-light: #313131;
   --light-disk-fill: #ffffff;
   --light-disk-stroke: #dbdbdb;
   --dark-disk-fill: #292929;
@@ -8,18 +7,74 @@
 }
 
 body {
-  background-color: var(--dark-disk-stroke);
+  height: 80vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 94vh;
+  flex-direction: column;
+  font-family: sans-serif;
+  color: #dadada;
+  background-color: #121212;
+  user-select: none;
+}
+
+#controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 1rem;
+}
+
+#settings {
+  margin: 2rem;
+  width: 18rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.setting {
+  margin: .5rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.switch input {
+  display: none;
+}
+
+.switch-option {
+  margin: 0;
+  padding: .25rem .75rem;
+  color: #626262;
+}
+
+.selected {
+  color: inherit;
+  background-color: var(--grey-light);
+  border-radius: 20px;
+  transition: 200ms;
+}
+
+.btn {
+  cursor: pointer;
+  padding: .75rem 1.25rem;
+  border-radius: 100px;
+  background-color: var(--grey-light);
+  transition: 200ms;
+}
+
+.btn:hover {
+  color: white;
+  background-color: #349e4b;
 }
 
 #board {
   display: grid;
   grid-template-columns: repeat(8, 75px);
   grid-template-rows: repeat(8, 75px);
-  background-color: var(--board-colour);
+  background-color: #1f6e30;
   padding: 2px;
   width: fit-content;
 }
@@ -28,7 +83,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--cell-colour);
+  background-color: #3dc45a;
   margin: 2px;
 }
 
@@ -57,7 +112,6 @@ body {
 }
 
 @keyframes flip-to-dark {
-
   from {
     transform: scale(1, 1);
   }
@@ -81,7 +135,6 @@ body {
 }
 
 @keyframes flip-to-light {
-
   from {
     transform: scale(1, 1);
   }
