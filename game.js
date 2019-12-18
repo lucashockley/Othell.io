@@ -230,9 +230,7 @@ class Game {
 
   startNextTurn() {
     this.turn *= -1;
-    if (this.isGameOver()) {
-      console.log('Game over');
-    } else {
+    if (!this.isGameOver()) {
       if (this.turn === -1) {
         if (this.darkPlayer === 'user') {
           this.showValidMoves(-1);
@@ -250,7 +248,7 @@ class Game {
   }
 }
 
-let game = new Game('ai', 'ai', true, 500);
+let game = new Game('user', 'ai', true, 500);
 
 const selectMove = () => {
   let x = Number(event.path[2].id[0]);

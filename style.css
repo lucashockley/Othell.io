@@ -12,7 +12,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 95vh;
+  height: 94vh;
 }
 
 #board {
@@ -121,7 +121,7 @@ body {
 }
 
 .move-light {
-  opacity: .5;
+  opacity: .3;
   fill: white;
   stroke: white;
 }
