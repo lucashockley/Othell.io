@@ -1,210 +1,259 @@
-const darkDisk = '<svg class="disk-dark" width="64" height="64" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>';
-const lightDisk = '<svg class="disk-light" width="64" height="64" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>';
-const darkMove = '<svg class="move dark-move" width="64" height="64" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10" onclick="selectMove()"></circle></svg>';
-const lightMove = '<svg class="move light-move" width="64" height="64" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>';
-
 const boardDisplay = document.getElementById('board');
-
-const placeDisk = (x, y, turn, animate) => {
-  board[x][y] = turn;
-  let disk = document.getElementById(`${x}-${y}`);
-  disk.innerHTML = turn === -1 ? darkDisk : lightDisk;
-  if (animate) {
-    disk.children[0].style.animation = 'place 200ms ease-out'
-    disk.onanimationend = () => {
-      disk.children[0].style.animation = '';
-    }
-  }
-}
-
-const flipDisk = (x, y, turn, animate) => {
-  board[x][y] = turn;
-  let disk = document.getElementById(`${x}-${y}`).firstElementChild;
-  if (animate) {
-    disk.className.baseVal += turn === -1 ? ' flip-dark' : ' flip-light';
-    disk.onanimationend = () => {
-      disk.className.baseVal = turn === -1 ? 'disk-dark' : 'disk-light';
-    }
-  } else {
-    disk.className.baseVal = turn === -1 ? 'disk-dark' : 'disk-light';
-  }
-}
-
-const isValidMove = (x, y, turn) => {
-  let result = false;
-  if (board[x][y] === 0) {
-    for (let i = x - 1; i < x + 2; i++) {
-      for (let j = y - 1; j < y + 2; j++) {
-        if (i > -1 && i < 8 && j > -1 && j < 8 && board[i][j] === turn * -1) {
-          let dx = i - x;
-          let dy = j - y;
-          let newX = x + dx;
-          let newY = y + dy;
-          while (newX > -1 && newX < 8 && newY > -1 && newY < 8 && board[newX][newY] === turn * -1) {
-            newX += dx;
-            newY += dy;
-          }
-          if (newX > -1 && newX < 8 && newY > -1 && newY < 8 && board[newX][newY] === turn) {
-            result = true;
-          }
-        }
-      }
-    }
-  }
-  return result;
-}
-
-const gameOver = () => {
-  alert('The game is over');
-}
-
-const move = (x, y, turn) => {
-  placeDisk(x, y, turn, true);
-  for (let i = x - 1; i < x + 2; i++) {
-    for (let j = y - 1; j < y + 2; j++) {
-      if (i > -1 && i < 8 && j > -1 && j < 8 && board[i][j] === turn * -1) {
-        let dx = i - x;
-        let dy = j - y;
-        let newX = x + dx;
-        let newY = y + dy;
-        while (newX > -1 && newX < 8 && newY > -1 && newY < 8 && board[newX][newY] === turn * -1) {
-          newX += dx;
-          newY += dy;
-        }
-        if (newX > -1 && newX < 8 && newY > -1 && newY < 8 && board[newX][newY] === turn) {
-          while (board[newX - dx][newY - dy] === turn * -1) {
-            flipDisk(newX - dx, newY - dy, turn, true);
-            newX -= dx;
-            newY -= dy;
-          }
-        }
-      }
-    }
-  }
-}
-
-const getDiskCount = () => {
-  let lightCount = darkCount = 0;
-  for (let i = 0; i < 8; i++) {
-    for (let j = 0; j < 8; j++) {
-      if (board[i][j] === -1) {
-        darkCount++;
-      } else if (board[i][j] === 1) {
-        lightCount++;
-      }
-    }
-  }
-  return {
-    light: lightCount,
-    dark: darkCount
-  }
-}
-
-function userMove(x, y) {
-  move(x, y, turn);
-  clearValidMoves();
-  if (isGameOver()) {
-    gameOver();
-  } else if (!hasMoves(turn * -1)) {
-    showValidMoves();
-  } else {
-    turn *= -1;
-    aiMove();
-  }
-}
-
-function aiMove() {
-  if (isGameOver()) {
-    console.log('Game over');
-    console.log(`Light: ${getDiskCount().light}, Dark: ${getDiskCount().dark}`);
-    let outcome;
-    if (getDiskCount().light === getDiskCount().dark) {
-      outcome = 'Draw';
-    } else {
-      outcome = getDiskCount().light > getDiskCount().dark ? 'Light wins' : 'Dark wins';
-    }
-    console.log(outcome);
-  } else {
-    setTimeout(() => {
-      let validMoves = getValidMoves(turn);
-      let chosenMove = validMoves[Math.floor(Math.random() * validMoves.length)];
-      move(chosenMove.x, chosenMove.y, turn);
-      if (!hasMoves(turn * -1)) {
-        aiMove();
-      } else {
-        turn *= -1;
-        showValidMoves();
-        // aiMove();
-      }
-    }, 200)
-  }
-}
-
-const getValidMoves = turn => {
-  let validMoves = [];
-  for (let i = 0; i < 8; i++) {
-    for (let j = 0; j < 8; j++) {
-      if (isValidMove(i, j, turn)) {
-        validMoves.push({
-          x: i,
-          y: j
-        });
-      }
-    }
-  }
-  return validMoves;
-}
-
-const showValidMoves = () => {
-  let validMoves = getValidMoves(turn);
-  for (let move in validMoves) {
-    let cell = document.getElementById(`${validMoves[move].x}-${validMoves[move].y}`);
-    cell.innerHTML = turn === -1 ? darkMove : lightMove;
-  }
-}
-
-const clearValidMoves = () => {
-  for (let i = 0; i < 8; i++) {
-    for (let j = 0; j < 8; j++) {
-      let cell = document.getElementById(`${i}-${j}`);
-      if (cell.hasChildNodes() && cell.lastChild.classList.contains('move')) {
-        cell.lastChild.remove();
-      }
-    }
-  }
-}
-
-const isGameOver = () => (getValidMoves(turn).length === 0 && getValidMoves(turn *= -1).length === 0);
-
-const hasMoves = turn => getValidMoves(turn).length !== 0;
 
 for (let i = 0; i < 8; i++) {
   for (let j = 0; j < 8; j++) {
     let cell = document.createElement('div');
     cell.className = 'cell';
-    cell.id = `${j}-${i}`;
+    cell.id = `${i}-${j}`;
     boardDisplay.appendChild(cell);
   }
 }
 
-let turn = -1;
-let board = Array(8).fill([]);
-for (let column in board) {
-  board[column] = Array(8).fill(0)
+const disk = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+disk.setAttribute('width', '64');
+disk.setAttribute('height', '64');
+disk.setAttribute('viewBox', '0 0 24 24');
+disk.setAttribute('stroke-width', '2');
+const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+circle.setAttribute('cx', '12');
+circle.setAttribute('cy', '12');
+circle.setAttribute('r', '10');
+disk.appendChild(circle);
+
+const darkDisk = disk.cloneNode(true);
+darkDisk.className.baseVal = 'disk-dark';
+const lightDisk = disk.cloneNode(true);
+lightDisk.className.baseVal = 'disk-light';
+
+let darkMove;
+let lightMove;
+
+class Game {
+  constructor(darkPlayerType, lightPlayerType, animate, aiDelay) {
+    this.animate = animate;
+    this.aiDelay = aiDelay;
+
+    this.board = [];
+    for (let i = 0; i < 8; i++) {
+      this.board[i] = Array(8).fill(0);
+    }
+
+    this.place(3, 3, 1);
+    this.place(3, 4, -1);
+    this.place(4, 3, -1);
+    this.place(4, 4, 1);
+
+    this.turn = -1;
+
+    this.darkPlayer = darkPlayerType;
+    this.lightPlayer = lightPlayerType;
+
+    if (this.darkPlayer === 'user') {
+      darkMove = disk.cloneNode(true);
+      darkMove.firstChild.setAttribute('onclick', 'selectMove()')
+      darkMove.className.baseVal = 'move-dark';
+
+      this.showValidMoves(-1);
+    }
+    if (this.lightPlayer === 'user') {
+      lightMove = disk.cloneNode(true);
+      lightMove.firstChild.setAttribute('onclick', 'selectMove()')
+      lightMove.className.baseVal = 'move-light';
+    }
+    if (this.darkPlayer === 'ai' && this.lightPlayer === 'ai') {
+      this.aiMove();
+    }
+  }
+
+  place(x, y, side) {
+    this.board[x][y] = side;
+
+    let cell = document.getElementById(`${x}-${y}`);
+    let disk = (side === -1 ? darkDisk : lightDisk).cloneNode(true);
+
+    if (this.animate) {
+      disk.style.animation = 'place 200ms ease-out'
+      disk.onanimationend = () => {
+        disk.style.animation = '';
+      }
+    }
+
+    cell.innerHTML = '';
+    cell.appendChild(disk);
+  }
+
+  flip(x, y, side) {
+    this.board[x][y] = side;
+
+    let cell = document.getElementById(`${x}-${y}`);
+    let disk = cell.firstElementChild;
+
+    if (this.animate) {
+      disk.className.baseVal += side === -1 ? ' flip-dark' : ' flip-light';
+      disk.onanimationend = () => {
+        disk.className.baseVal = side === -1 ? 'disk-dark' : 'disk-light';
+      }
+    } else {
+      disk.className.baseVal = side === -1 ? 'disk-dark' : 'disk-light';
+    }
+  }
+
+  move(x, y, side) {
+    this.place(x, y, side);
+    for (let i = x - 1; i < x + 2; i++) {
+      for (let j = y - 1; j < y + 2; j++) {
+        if (i > -1 && i < 8 && j > -1 && j < 8 && this.board[i][j] === side * -1) {
+          let dx = i - x;
+          let dy = j - y;
+          let newX = x + dx;
+          let newY = y + dy;
+          while (newX > -1 && newX < 8 && newY > -1 && newY < 8 && this.board[newX][newY] === side * -1) {
+            newX += dx;
+            newY += dy;
+          }
+          if (newX > -1 && newX < 8 && newY > -1 && newY < 8 && this.board[newX][newY] === side) {
+            while (this.board[newX - dx][newY - dy] === side * -1) {
+              this.flip(newX - dx, newY - dy, side);
+              newX -= dx;
+              newY -= dy;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  isValidMove(x, y, side) {
+    let result = false;
+    if (this.board[x][y] === 0) {
+      for (let i = x - 1; i < x + 2; i++) {
+        for (let j = y - 1; j < y + 2; j++) {
+          if (i > -1 && i < 8 && j > -1 && j < 8 && this.board[i][j] === side * -1) {
+            let dx = i - x;
+            let dy = j - y;
+            let newX = x + dx;
+            let newY = y + dy;
+            while (newX > -1 && newX < 8 && newY > -1 && newY < 8 && this.board[newX][newY] === side * -1) {
+              newX += dx;
+              newY += dy;
+            }
+            if (newX > -1 && newX < 8 && newY > -1 && newY < 8 && this.board[newX][newY] === side) {
+              result = true;
+            }
+          }
+        }
+      }
+    }
+    return result;
+  }
+
+  getValidMoves(side) {
+    let validMoves = [];
+    for (let i = 0; i < 8; i++) {
+      for (let j = 0; j < 8; j++) {
+        if (this.isValidMove(i, j, side)) {
+          validMoves.push({
+            x: i,
+            y: j
+          });
+        }
+      }
+    }
+    return validMoves;
+  }
+
+  showValidMoves(side) {
+    for (let i = 0; i < 8; i++) {
+      for (let j = 0; j < 8; j++) {
+        if (this.isValidMove(i, j, side)) {
+          let cell = document.getElementById(`${i}-${j}`);
+          let disk = (side === -1 ? darkMove : lightMove).cloneNode(true);
+          cell.innerHTML = '';
+          cell.appendChild(disk);
+        }
+      }
+    }
+  }
+
+  clearValidMoves() {
+    for (let i = 0; i < 8; i++) {
+      for (let j = 0; j < 8; j++) {
+        if (this.board[i][j] === 0) {
+          let cell = document.getElementById(`${i}-${j}`);
+          cell.innerHTML = '';
+        }
+      }
+    }
+  }
+
+  isGameOver() {
+    return (this.getValidMoves(this.turn).length === 0 && this.getValidMoves(this.turn * -1).length === 0)
+  }
+
+  getDiskCount() {
+    let darkCount = 0;
+    let lightCount = 0;
+    for (let i = 0; i < 8; i++) {
+      for (let j = 0; j < 8; j++) {
+        if (this.board[i][j] === -1) {
+          darkCount++;
+        } else if (this.board[i][j] === 1) {
+          lightCount++;
+        }
+      }
+    }
+    return {
+      dark: darkCount,
+      light: lightCount,
+      total: darkCount + lightCount
+    }
+  }
+
+  userMove(x, y) {
+    this.clearValidMoves();
+    if (this.getValidMoves(this.turn).length > 0) {
+      this.move(x, y, this.turn);
+    }
+    this.startNextTurn();
+  }
+
+  aiMove() {
+    setTimeout(() => {
+      if (this.getValidMoves(this.turn).length > 0) {
+        let validMoves = this.getValidMoves(this.turn);
+        let chosenMove = validMoves[Math.floor(Math.random() * validMoves.length)];
+        this.move(chosenMove.x, chosenMove.y, this.turn);
+      }
+      this.startNextTurn();
+    }, this.aiDelay)
+  }
+
+  startNextTurn() {
+    this.turn *= -1;
+    if (this.isGameOver()) {
+      console.log('Game over');
+    } else {
+      if (this.turn === -1) {
+        if (this.darkPlayer === 'user') {
+          this.showValidMoves(-1);
+        } else {
+          this.aiMove();
+        }
+      } else {
+        if (this.lightPlayer === 'user') {
+          this.showValidMoves(1);
+        } else {
+          this.aiMove();
+        }
+      }
+    }
+  }
 }
 
-placeDisk(3, 3, 1);
-placeDisk(3, 4, -1);
-placeDisk(4, 3, -1);
-placeDisk(4, 4, 1);
+let game = new Game('ai', 'ai', true, 500);
 
 const selectMove = () => {
   let x = Number(event.path[2].id[0]);
   let y = Number(event.path[2].id[2]);
-  if (isValidMove(x, y, turn)) {
-    userMove(x, y);
-  }
+  game.userMove(x, y);
 }
-
-showValidMoves();
-// aiMove();

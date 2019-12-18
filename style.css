@@ -114,13 +114,13 @@ body {
   }
 }
 
-.dark-move {
+.move-dark {
   opacity: .3;
   fill: black;
   stroke: black;
 }
 
-.light-move {
+.move-light {
   opacity: .5;
   fill: white;
   stroke: white;
