@@ -1,5 +1,6 @@
 :root {
   --grey-light: #313131;
+  --grey-dark: #1b1b1b;
   --light-disk-fill: #ffffff;
   --light-disk-stroke: #dbdbdb;
   --dark-disk-fill: #292929;
@@ -7,22 +8,22 @@
 }
 
 body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   color: #dadada;
   background-color: #121212;
   font-family: 'Heebo', sans-serif;
   user-select: none;
 }
 
-#controls {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  margin: 4rem;
-}
-
 #settings {
-  margin: 1rem;
+  margin: 2rem;
+  padding: 1rem 2rem;
   width: 18rem;
+  background-color: var(--grey-dark);
+  border-radius: 10px;
 }
 
 .setting {
@@ -31,13 +32,17 @@ body {
   justify-content: space-between;
 }
 
+.setting label {
+  margin-left: .5rem;
+}
+
 .switch input {
   display: none;
 }
 
 .switch-option {
-  padding: .25rem .75rem;
-  color: #626262;
+  padding: .25rem 1rem;
+  color: #727272;
 }
 
 .selected {
@@ -47,8 +52,9 @@ body {
   transition: 200ms;
 }
 
-.btn {
+.button {
   cursor: pointer;
+  margin: 2rem;
   padding: .75rem 1.25rem;
   border-radius: 100px;
   background-color: var(--grey-light);
@@ -56,12 +62,12 @@ body {
   transition: 200ms;
 }
 
-.btn:hover {
+.button:hover {
   color: white;
   background-color: #349e4b;
 }
 
-.btn:active {
+.button:active {
   transform: scale(0.95);
 }
 
