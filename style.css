@@ -7,37 +7,28 @@
 }
 
 body {
-  height: 80vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  font-family: sans-serif;
   color: #dadada;
   background-color: #121212;
+  font-family: 'Heebo', sans-serif;
   user-select: none;
 }
 
 #controls {
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin: 1rem;
+  margin: 8rem;
 }
 
 #settings {
   margin: 2rem;
   width: 18rem;
-  display: flex;
-  flex-direction: column;
 }
 
 .setting {
-  margin: .5rem 0;
+  margin: 1rem 0;
   display: flex;
   justify-content: space-between;
-  align-items: center;
 }
 
 .switch input {
@@ -45,7 +36,6 @@ body {
 }
 
 .switch-option {
-  margin: 0;
   padding: .25rem .75rem;
   color: #626262;
 }
@@ -62,6 +52,7 @@ body {
   padding: .75rem 1.25rem;
   border-radius: 100px;
   background-color: var(--grey-light);
+  transform: scale(1);
   transition: 200ms;
 }
 
@@ -70,10 +61,14 @@ body {
   background-color: #349e4b;
 }
 
+.btn:active {
+  transform: scale(0.95);
+}
+
 #board {
   display: grid;
-  grid-template-columns: repeat(8, 75px);
-  grid-template-rows: repeat(8, 75px);
+  grid-template-columns: repeat(8, 60px);
+  grid-template-rows: repeat(8, 60px);
   background-color: #1f6e30;
   padding: 2px;
   width: fit-content;

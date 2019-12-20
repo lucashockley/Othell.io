@@ -1,15 +1,15 @@
 const boardDisplay = document.getElementById('board');
 
 const disk = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-disk.setAttribute('width', '64');
-disk.setAttribute('height', '64');
+disk.setAttribute('width', '60');
+disk.setAttribute('height', '60');
 disk.setAttribute('viewBox', '0 0 24 24');
 disk.setAttribute('stroke-width', '2');
 
 const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
 circle.setAttribute('cx', '12');
 circle.setAttribute('cy', '12');
-circle.setAttribute('r', '10');
+circle.setAttribute('r', '9');
 
 disk.appendChild(circle);
 
@@ -21,6 +21,8 @@ lightDisk.className.baseVal = 'disk-light';
 
 let darkMove;
 let lightMove;
+
+const inBoard = (x, y) => x > -1 && x < 8 && y > -1 && y < 8;
 
 class Game {
   constructor(darkPlayerType, lightPlayerType, animate, aiDelay) {
@@ -99,18 +101,18 @@ class Game {
 
     for (let i = x - 1; i < x + 2; i++) {
       for (let j = y - 1; j < y + 2; j++) {
-        if (i > -1 && i < 8 && j > -1 && j < 8 && this.board[i][j] === side * -1) {
+        if (inBoard(i, j) && this.board[i][j] === side * -1) {
           let dx = i - x;
           let dy = j - y;
           let newX = x + dx;
           let newY = y + dy;
 
-          while (newX > -1 && newX < 8 && newY > -1 && newY < 8 && this.board[newX][newY] === side * -1) {
+          while (inBoard(newX, newY) && this.board[newX][newY] === side * -1) {
             newX += dx;
             newY += dy;
           }
 
-          if (newX > -1 && newX < 8 && newY > -1 && newY < 8 && this.board[newX][newY] === side) {
+          if (inBoard(newX, newY) && this.board[newX][newY] === side) {
             while (this.board[newX - dx][newY - dy] === side * -1) {
               this.flip(newX - dx, newY - dy, side);
 
@@ -129,18 +131,18 @@ class Game {
     if (this.board[x][y] === 0) {
       for (let i = x - 1; i < x + 2; i++) {
         for (let j = y - 1; j < y + 2; j++) {
-          if (i > -1 && i < 8 && j > -1 && j < 8 && this.board[i][j] === side * -1) {
+          if (inBoard(i, j) && this.board[i][j] === side * -1) {
             let dx = i - x;
             let dy = j - y;
             let newX = x + dx;
             let newY = y + dy;
 
-            while (newX > -1 && newX < 8 && newY > -1 && newY < 8 && this.board[newX][newY] === side * -1) {
+            while (inBoard(newX, newY) && this.board[newX][newY] === side * -1) {
               newX += dx;
               newY += dy;
             }
 
-            if (newX > -1 && newX < 8 && newY > -1 && newY < 8 && this.board[newX][newY] === side) {
+            if (inBoard(newX, newY) && this.board[newX][newY] === side) {
               result = true;
             }
           }
@@ -285,7 +287,7 @@ const startNewGame = () => {
   let settings = document.getElementById('settings');
 
   let darkPlayerType = settings.children[0].lastElementChild.firstElementChild.checked ? 'ai' : 'user';
-  let lightPlayerType = settings.children[1].lastElementChild.firstElementChild.checked ? 'ai' : 'user';
+  let lightPlayerType = !settings.children[1].lastElementChild.firstElementChild.checked ? 'ai' : 'user';
   let animations = !settings.children[2].lastElementChild.firstElementChild.checked;
 
   game = new Game(darkPlayerType, lightPlayerType, animations, 500);
