@@ -52,23 +52,49 @@ body {
   transition: 200ms;
 }
 
-.button {
-  cursor: pointer;
+button {
   margin: 2rem;
   padding: .75rem 1.25rem;
+  border: none;
   border-radius: 100px;
+  outline: none;
+  cursor: pointer;
+  color: white;
   background-color: var(--grey-light);
+  font: inherit;
   transform: scale(1);
   transition: 200ms;
 }
 
-.button:hover {
-  color: white;
+button:hover {
   background-color: #349e4b;
 }
 
-.button:active {
+button:active {
   transform: scale(0.95);
+}
+
+.game-container {
+  display: flex;
+}
+
+.score-container {
+  margin: 1rem;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+}
+
+.icon {
+  padding: 0 1rem;
+}
+
+.score {
+  width: 2em;
+}
+
+#dark-score {
+  direction: rtl;
 }
 
 #board {

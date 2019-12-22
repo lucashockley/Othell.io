@@ -11,8 +11,24 @@
 </head>
 
 <body>
-  <div class="button" onclick="startNewGame()">Start Game</div>
-  <div id="board"></div>
+  <button onclick="startNewGame()">Start Game</button>
+  <div class="game-container">
+    <div class="score-container">
+      <span id="dark-score" class="score">-</span>
+      <svg class="disk-dark icon" xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24"
+        stroke-width="2">
+        <circle cx="12" cy="12" r="9"></circle>
+      </svg>
+    </div>
+    <div id="board"></div>
+    <div class="score-container">
+      <svg class="disk-light icon" xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24"
+        stroke-width="2">
+        <circle cx="12" cy="12" r="9"></circle>
+      </svg>
+      <span id="light-score" class="score">-</span>
+    </div>
+  </div>
   <div id="settings">
     <div class="setting">
       <label for="dark-user-type">Dark Player</label>

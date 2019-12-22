@@ -41,6 +41,8 @@ class Game {
     this.place(4, 3, -1);
     this.place(4, 4, 1);
 
+    this.displayScore();
+
     this.darkPlayer = darkPlayerType;
     this.lightPlayer = lightPlayerType;
 
@@ -61,6 +63,11 @@ class Game {
     }
 
     this.running = true;
+  }
+
+  displayScore() {
+    document.getElementById('dark-score').innerHTML = this.getDiskCount().dark;
+    document.getElementById('light-score').innerHTML = this.getDiskCount().light;
   }
 
   place(x, y, side) {
@@ -236,6 +243,8 @@ class Game {
   }
 
   startNextTurn() {
+    this.displayScore();
+
     if (this.running) {
       this.turn *= -1;
 
