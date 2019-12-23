@@ -27,11 +27,11 @@ body {
   margin-left: .5rem;
 }
 
-.switch input {
+.options input {
   display: none;
 }
 
-.switch-option {
+.option {
   padding: .25rem 1rem;
   color: #727272;
 }

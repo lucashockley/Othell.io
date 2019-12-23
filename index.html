@@ -4,16 +4,16 @@
 <head>
   <meta charset="UTF-8">
   <link href="https://fonts.googleapis.com/css?family=Heebo:300,400,700&display=swap" rel="stylesheet">
-  <script defer src="app.js"></script>
-  <script defer src="game.js"></script>
-  <link rel="stylesheet" href="variables.css">
-  <link rel="stylesheet" href="game.css">
-  <link rel="stylesheet" href="main.css">
+  <script defer src="scripts/app.js"></script>
+  <script defer src="scripts/game.js"></script>
+  <link rel="stylesheet" href="stylesheets/variables.css">
+  <link rel="stylesheet" href="stylesheets/game.css">
+  <link rel="stylesheet" href="stylesheets/main.css">
   <title>Othello</title>
 </head>
 
 <body>
-  <button onclick="startNewGame()">Start Game</button>
+  <button onclick="startGame()">Start Game</button>
   <div class="game-container">
     <div class="score-container">
       <span id="dark-score" class="score">-</span>
@@ -34,26 +34,26 @@
   <div id="settings">
     <div class="setting">
       <label for="dark-user-type">Dark Player</label>
-      <span class="switch">
+      <span class="options">
         <input type="checkbox" name="dark-user-type" id="dark-user-type">
-        <span class="switch-option selected" onclick="changeSetting()">Human</span>
-        <span class="switch-option" onclick="changeSetting()">AI</span>
+        <span class="option selected" onclick="changeSetting()">Human</span>
+        <span class="option" onclick="changeSetting()">AI</span>
       </span>
     </div>
     <div class="setting">
       <label for="light-user-type">Light Player</label>
-      <span class="switch">
+      <span class="options">
         <input type="checkbox" name="light-user-type" id="light-user-type">
-        <span class="switch-option" onclick="changeSetting()">Human</span>
-        <span class="switch-option selected" onclick="changeSetting()">AI</span>
+        <span class="option" onclick="changeSetting()">Human</span>
+        <span class="option selected" onclick="changeSetting()">AI</span>
       </span>
     </div>
     <div class="setting">
       <label for="animate">Disk Animations</label>
-      <span class="switch">
+      <span class="options">
         <input type="checkbox" name="animate" id="animate">
-        <span class="switch-option selected" onclick="changeSetting()">On</span>
-        <span class="switch-option" onclick="changeSetting()">Off</span>
+        <span class="option selected" onclick="changeSetting()">On</span>
+        <span class="option" onclick="changeSetting()">Off</span>
       </span>
     </div>
   </div>
