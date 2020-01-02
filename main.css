@@ -59,10 +59,6 @@ button:active {
   padding: 0 1rem;
 }
 
-#settings {
-  width: 32rem;
-}
-
 .setting {
   margin: 1rem 0;
   display: flex;
@@ -71,6 +67,7 @@ button:active {
 
 .setting label {
   margin-left: .5rem;
+  margin-right: 2.5rem;
 }
 
 .options input {
@@ -78,6 +75,7 @@ button:active {
 }
 
 .option {
+  margin: -.25rem;
   padding: .25rem .75rem;
   color: #727272;
 }

@@ -61,9 +61,6 @@ const displayScore = () => {
 }
 
 const startGame = () => {
-  info.className = '';
-  info.innerHTML = '';
-
   if (game) {
     game.running = false;
     createCells();
@@ -98,8 +95,12 @@ const startGame = () => {
           darkDifficulty = 2;
           break;
 
+        case 'Expert':
+          darkDifficulty = 4
+          break;
+
         case 'Master':
-          darkDifficulty = 5;
+          darkDifficulty = 8;
           break;
       }
     }
@@ -116,14 +117,21 @@ const startGame = () => {
           lightDifficulty = 2;
           break;
 
+        case 'Expert':
+          lightDifficulty = 4
+          break;
+
         case 'Master':
-          lightDifficulty = 5;
+          lightDifficulty = 8;
           break;
       }
     }
   }
 
   game = new DisplayGame(darkPlayerType, lightPlayerType, darkDifficulty, lightDifficulty, 500);
+  game.displayScore();
+
+  info.innerHTML = `Dark's turn to move`;
 }
 
 const selectMove = () => {
@@ -134,8 +142,6 @@ const selectMove = () => {
 }
 
 function gameOver() {
-  info.className = 'container';
-
   let darkCount = game.diskCount.dark;
   let lightCount = game.diskCount.light;
 

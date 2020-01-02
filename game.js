@@ -7,7 +7,7 @@ const copyGame = (game) => {
   return newGame;
 }
 
-const minimax = (position, move, depth, isMaximisingPlayer) => {
+const minimax = (position, move, depth, isMaximisingPlayer, alpha, beta) => {
   if (depth === 0 || position.getValidMoves(position.turn).length === 0) {
     return {
       evaluation: position.staticEvaluation,
@@ -21,12 +21,16 @@ const minimax = (position, move, depth, isMaximisingPlayer) => {
     for (const nextMove of moves) {
       let nextPosition = copyGame(position);
       nextPosition.move(nextMove.x, nextMove.y);
-      let newEvaluation = minimax(nextPosition, nextMove, depth - 1, false);
+      let newEvaluation = minimax(nextPosition, nextMove, depth - 1, false, alpha, beta);
       if (!maxEvaluation || newEvaluation.evaluation > maxEvaluation.evaluation) {
         maxEvaluation = {
           evaluation: newEvaluation.evaluation,
           move: nextMove
         }
+      }
+      alpha = Math.max(alpha, newEvaluation.evaluation);
+      if (beta <= alpha) {
+        break;
       }
     }
     return maxEvaluation;
@@ -36,12 +40,16 @@ const minimax = (position, move, depth, isMaximisingPlayer) => {
     for (const nextMove of moves) {
       let nextPosition = copyGame(position);
       nextPosition.move(nextMove.x, nextMove.y);
-      let newEvaluation = minimax(nextPosition, nextMove, depth - 1, true);
+      let newEvaluation = minimax(nextPosition, nextMove, depth - 1, true, alpha, beta);
       if (!minEvaluation || newEvaluation.evaluation < minEvaluation.evaluation) {
         minEvaluation = {
           evaluation: newEvaluation.evaluation,
           move: nextMove
         }
+      }
+      beta = Math.min(beta, newEvaluation.evaluation);
+      if (beta <= alpha) {
+        break;
       }
     }
     return minEvaluation;
@@ -187,7 +195,7 @@ class Game {
   computerMove() {
     let difficulty = this.turn === -1 ? this.darkDifficulty : this.lightDifficulty;
     let isMaximisingPlayer = this.turn === -1;
-    let move = minimax(this, null, difficulty, isMaximisingPlayer).move;
+    let move = minimax(this, null, difficulty, isMaximisingPlayer, -64, 64).move;
     this.move(move.x, move.y);
   }
 }
@@ -201,18 +209,11 @@ class DisplayGame extends Game {
     this.darkPlayer = darkPlayerType;
     this.lightPlayer = lightPlayerType;
 
-    this.displayScore();
-
     if (this.darkPlayer === 'user') {
       this.showValidMoves();
     } else {
       setTimeout(this.computerMove.bind(this), this.computerDelay);
     }
-  }
-
-  displayScore() {
-    document.getElementById('dark-score').innerHTML = this.diskCount.dark;
-    document.getElementById('light-score').innerHTML = this.diskCount.light;
   }
 
   showValidMoves() {
@@ -226,6 +227,11 @@ class DisplayGame extends Game {
         }
       }
     }
+  }
+
+  displayScore() {
+    document.getElementById('dark-score').innerHTML = this.diskCount.dark;
+    document.getElementById('light-score').innerHTML = this.diskCount.light;
   }
 
   place(x, y) {
@@ -286,14 +292,18 @@ class DisplayGame extends Game {
         if (this.getValidMoves(this.turn).length > 0) {
           if (this.turn === -1) {
             if (this.darkPlayer === 'user') {
+              info.innerHTML = `Dark's turn to move`;
               this.showValidMoves();
             } else {
+              info.innerHTML = 'Dark is thinking of a move...';
               setTimeout(this.computerMove.bind(this), this.computerDelay);
             }
           } else {
             if (this.lightPlayer === 'user') {
+              info.innerHTML = `Light's turn to move`;
               this.showValidMoves();
             } else {
+              info.innerHTML = 'Light is thinking of a move...';
               setTimeout(this.computerMove.bind(this), this.computerDelay);
             }
           }
