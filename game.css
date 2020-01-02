@@ -3,6 +3,7 @@
   grid-template-columns: repeat(8, 60px);
   grid-template-rows: repeat(8, 60px);
   background-color: #1f6e30;
+  margin: 1rem;
   padding: 2px;
   width: fit-content;
 }

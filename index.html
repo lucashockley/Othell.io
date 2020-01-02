@@ -14,30 +14,38 @@
 
 <body>
   <button onclick="startGame()">Start Game</button>
-  <div class="game-container">
-    <div class="score-container">
-      <span id="dark-score" class="score">-</span>
-      <svg class="disk-dark icon" xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24"
-        stroke-width="2">
-        <circle cx="12" cy="12" r="9"></circle>
-      </svg>
-    </div>
-    <div id="board"></div>
-    <div class="score-container">
-      <svg class="disk-light icon" xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24"
-        stroke-width="2">
-        <circle cx="12" cy="12" r="9"></circle>
-      </svg>
-      <span id="light-score" class="score">-</span>
-    </div>
+
+  <div id="board"></div>
+
+  <div id="info"></div>
+
+  <div id="scores" class="container">
+    <span id="dark-score" class="score">-</span>
+    <svg class="disk-dark icon" xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24"
+      stroke-width="2">
+      <circle cx="12" cy="12" r="9"></circle>
+    </svg>
+    <svg class="disk-light icon" xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24"
+      stroke-width="2">
+      <circle cx="12" cy="12" r="9"></circle>
+    </svg>
+    <span id="light-score" class="score">-</span>
   </div>
-  <div id="settings">
+
+  <div id="settings" class="container">
     <div class="setting">
       <label for="dark-user-type">Dark Player</label>
       <span class="options">
-        <input type="checkbox" name="dark-user-type" id="dark-user-type">
         <span class="option selected" onclick="changeSetting()">Human</span>
-        <span class="option" onclick="changeSetting()">AI</span>
+        <span class="option" onclick="changeSetting()">Computer</span>
+      </span>
+    </div>
+    <div class="setting">
+      <label for="dark-difficulty">Dark Computer Difficulty</label>
+      <span class="options">
+        <span class="option" onclick="changeSetting()">Beginner</span>
+        <span class="option selected" onclick="changeSetting()">Intermediate</span>
+        <span class="option" onclick="changeSetting()">Master</span>
       </span>
     </div>
     <div class="setting">
@@ -45,15 +53,15 @@
       <span class="options">
         <input type="checkbox" name="light-user-type" id="light-user-type">
         <span class="option" onclick="changeSetting()">Human</span>
-        <span class="option selected" onclick="changeSetting()">AI</span>
+        <span class="option selected" onclick="changeSetting()">Computer</span>
       </span>
     </div>
     <div class="setting">
-      <label for="animate">Disk Animations</label>
+      <label for="light-difficulty">Light Computer Difficulty</label>
       <span class="options">
-        <input type="checkbox" name="animate" id="animate">
-        <span class="option selected" onclick="changeSetting()">On</span>
-        <span class="option" onclick="changeSetting()">Off</span>
+        <span class="option" onclick="changeSetting()">Beginner</span>
+        <span class="option selected" onclick="changeSetting()">Intermediate</span>
+        <span class="option" onclick="changeSetting()">Master</span>
       </span>
     </div>
   </div>
