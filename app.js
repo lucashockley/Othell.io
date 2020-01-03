@@ -128,7 +128,7 @@ const startGame = () => {
     }
   }
 
-  game = new DisplayGame(darkPlayerType, lightPlayerType, darkDifficulty, lightDifficulty, 500);
+  game = new DisplayGame(darkPlayerType, lightPlayerType, darkDifficulty, lightDifficulty, 300);
   game.displayScore();
 
   info.innerHTML = `Dark's turn to move`;
