@@ -5,6 +5,17 @@ const changeSetting = () => {
       option.classList.remove('selected');
     }
     event.target.classList.add('selected');
+
+    if (document.getElementById('dark-computer').classList.contains('selected')) {
+      document.getElementById('dark-difficulty').style.display = 'flex';
+    } else {
+      document.getElementById('dark-difficulty').style.display = 'none';
+    }
+    if (document.getElementById('light-computer').classList.contains('selected')) {
+      document.getElementById('light-difficulty').style.display = 'flex';
+    } else {
+      document.getElementById('light-difficulty').style.display = 'none';
+    }
   }
 }
 

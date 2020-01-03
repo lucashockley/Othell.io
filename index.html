@@ -35,37 +35,36 @@
 
   <div id="settings" class="container">
     <div class="setting">
-      <label for="dark-user-type">Dark Player</label>
-      <span class="options">
+      <label>Dark Player</label>
+      <div class="options">
         <span class="option selected" onclick="changeSetting()">Human</span>
-        <span class="option" onclick="changeSetting()">Computer</span>
-      </span>
+        <span id="dark-computer" class="option" onclick="changeSetting()">Computer</span>
+      </div>
     </div>
-    <div class="setting">
-      <label for="dark-difficulty">Dark Computer Difficulty</label>
-      <span class="options">
+    <div id="dark-difficulty" class="setting">
+      <label>Dark Computer Difficulty</label>
+      <div class="options">
         <span class="option" onclick="changeSetting()">Beginner</span>
         <span class="option selected" onclick="changeSetting()">Intermediate</span>
         <span class="option" onclick="changeSetting()">Expert</span>
         <span class="option" onclick="changeSetting()">Master</span>
-      </span>
+      </div>
     </div>
     <div class="setting">
-      <label for="light-user-type">Light Player</label>
-      <span class="options">
-        <input type="checkbox" name="light-user-type" id="light-user-type">
+      <label>Light Player</label>
+      <div class="options">
         <span class="option" onclick="changeSetting()">Human</span>
-        <span class="option selected" onclick="changeSetting()">Computer</span>
-      </span>
+        <span id="light-computer" class="option selected" onclick="changeSetting()">Computer</span>
+      </div>
     </div>
-    <div class="setting">
-      <label for="light-difficulty">Light Computer Difficulty</label>
-      <span class="options">
+    <div id="light-difficulty" class="setting">
+      <label>Light Computer Difficulty</label>
+      <div class="options">
         <span class="option" onclick="changeSetting()">Beginner</span>
         <span class="option selected" onclick="changeSetting()">Intermediate</span>
         <span class="option" onclick="changeSetting()">Expert</span>
         <span class="option" onclick="changeSetting()">Master</span>
-      </span>
+      </div>
     </div>
   </div>
 </body>

@@ -68,6 +68,10 @@ button:active {
   padding: 0 1rem;
 }
 
+#settings {
+  width: 34rem;
+}
+
 .setting {
   margin: 1rem 0;
   display: flex;
@@ -77,6 +81,11 @@ button:active {
 .setting label {
   margin-left: .5rem;
   margin-right: 2.5rem;
+}
+
+.options {
+  display: flex;
+  align-items: center;
 }
 
 .options input {
@@ -94,4 +103,8 @@ button:active {
   background-color: var(--grey-light);
   border-radius: 20px;
   transition: 200ms;
+}
+
+#dark-difficulty {
+  display: none;
 }
