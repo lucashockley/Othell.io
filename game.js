@@ -6,8 +6,7 @@ const copyGame = (game) => {
   newGame.turn = game.turn;
   return newGame;
 }
-
-const minimax = (position, move, depth, isMaximisingPlayer, alpha, beta) => {
+const minimax = (position, move, depth, alpha, beta) => {
   if (depth === 0 || position.getValidMoves(position.turn).length === 0) {
     return {
       evaluation: position.staticEvaluation,
@@ -15,15 +14,15 @@ const minimax = (position, move, depth, isMaximisingPlayer, alpha, beta) => {
     }
   }
 
-  if (isMaximisingPlayer) {
-    let maxEvaluation;
-    let moves = position.getValidMoves(-1);
-    for (const nextMove of moves) {
-      let nextPosition = copyGame(position);
-      nextPosition.move(nextMove.x, nextMove.y);
-      let newEvaluation = minimax(nextPosition, nextMove, depth - 1, false, alpha, beta);
-      if (!maxEvaluation || newEvaluation.evaluation > maxEvaluation.evaluation) {
-        maxEvaluation = {
+  let bestEvaluation;
+  let moves = position.getValidMoves(position.turn);
+  for (const nextMove of moves) {
+    let nextPosition = copyGame(position);
+    nextPosition.move(nextMove.x, nextMove.y);
+    let newEvaluation = minimax(nextPosition, nextMove, depth - 1, alpha, beta);
+    if (position.turn === -1) {
+      if (!bestEvaluation || newEvaluation.evaluation > bestEvaluation.evaluation) {
+        bestEvaluation = {
           evaluation: newEvaluation.evaluation,
           move: nextMove
         }
@@ -32,17 +31,9 @@ const minimax = (position, move, depth, isMaximisingPlayer, alpha, beta) => {
       if (beta <= alpha) {
         break;
       }
-    }
-    return maxEvaluation;
-  } else {
-    let minEvaluation;
-    let moves = position.getValidMoves(1);
-    for (const nextMove of moves) {
-      let nextPosition = copyGame(position);
-      nextPosition.move(nextMove.x, nextMove.y);
-      let newEvaluation = minimax(nextPosition, nextMove, depth - 1, true, alpha, beta);
-      if (!minEvaluation || newEvaluation.evaluation < minEvaluation.evaluation) {
-        minEvaluation = {
+    } else {
+      if (!bestEvaluation || newEvaluation.evaluation < bestEvaluation.evaluation) {
+        bestEvaluation = {
           evaluation: newEvaluation.evaluation,
           move: nextMove
         }
@@ -52,8 +43,8 @@ const minimax = (position, move, depth, isMaximisingPlayer, alpha, beta) => {
         break;
       }
     }
-    return minEvaluation;
   }
+  return bestEvaluation;
 }
 
 class Game {
@@ -194,8 +185,7 @@ class Game {
 
   computerMove() {
     let difficulty = this.turn === -1 ? this.darkDifficulty : this.lightDifficulty;
-    let isMaximisingPlayer = this.turn === -1;
-    let move = minimax(this, null, difficulty, isMaximisingPlayer, -64, 64).move;
+    let move = minimax(this, null, difficulty, -64, 64).move;
     this.move(move.x, move.y);
   }
 }
