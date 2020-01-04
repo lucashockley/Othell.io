@@ -83,21 +83,21 @@ const startGame = () => {
   let darkDifficulty;
   let lightDifficulty;
 
-  for (const type of settings.children[0].lastElementChild.children) {
-    if (type.classList.contains('selected')) {
-      darkPlayerType = type.innerHTML === 'Human' ? 'user' : 'computer';
+  for (const option of settings.children[0].lastElementChild.children) {
+    if (option.classList.contains('selected')) {
+      darkPlayerType = option.innerHTML === 'Human' ? 'user' : 'computer';
     }
   }
 
-  for (const type of settings.children[2].lastElementChild.children) {
-    if (type.classList.contains('selected')) {
-      lightPlayerType = type.innerHTML === 'Human' ? 'user' : 'computer';
+  for (const option of settings.children[2].lastElementChild.children) {
+    if (option.classList.contains('selected')) {
+      lightPlayerType = option.innerHTML === 'Human' ? 'user' : 'computer';
     }
   }
 
-  for (const type of settings.children[1].lastElementChild.children) {
-    if (type.classList.contains('selected')) {
-      switch (type.innerHTML) {
+  for (const option of settings.children[1].lastElementChild.children) {
+    if (option.classList.contains('selected')) {
+      switch (option.innerHTML) {
         case 'Beginner':
           darkDifficulty = 1;
           break;
@@ -117,9 +117,9 @@ const startGame = () => {
     }
   }
 
-  for (const type of settings.children[3].lastElementChild.children) {
-    if (type.classList.contains('selected')) {
-      switch (type.innerHTML) {
+  for (const option of settings.children[3].lastElementChild.children) {
+    if (option.classList.contains('selected')) {
+      switch (option.innerHTML) {
         case 'Beginner':
           lightDifficulty = 1;
           break;

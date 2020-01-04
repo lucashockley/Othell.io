@@ -6,6 +6,7 @@ const copyGame = (game) => {
   newGame.turn = game.turn;
   return newGame;
 }
+
 const minimax = (position, move, depth, alpha, beta) => {
   if (depth === 0 || position.getValidMoves(position.turn).length === 0) {
     return {
@@ -16,10 +17,13 @@ const minimax = (position, move, depth, alpha, beta) => {
 
   let bestEvaluation;
   let moves = position.getValidMoves(position.turn);
+
   for (const nextMove of moves) {
     let nextPosition = copyGame(position);
     nextPosition.move(nextMove.x, nextMove.y);
+
     let newEvaluation = minimax(nextPosition, nextMove, depth - 1, alpha, beta);
+
     if (position.turn === -1) {
       if (!bestEvaluation || newEvaluation.evaluation > bestEvaluation.evaluation) {
         bestEvaluation = {
@@ -27,10 +31,8 @@ const minimax = (position, move, depth, alpha, beta) => {
           move: nextMove
         }
       }
+
       alpha = Math.max(alpha, newEvaluation.evaluation);
-      if (beta <= alpha) {
-        break;
-      }
     } else {
       if (!bestEvaluation || newEvaluation.evaluation < bestEvaluation.evaluation) {
         bestEvaluation = {
@@ -38,12 +40,14 @@ const minimax = (position, move, depth, alpha, beta) => {
           move: nextMove
         }
       }
+
       beta = Math.min(beta, newEvaluation.evaluation);
-      if (beta <= alpha) {
-        break;
-      }
+    }
+    if (beta <= alpha) {
+      break;
     }
   }
+
   return bestEvaluation;
 }
 

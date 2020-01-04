@@ -68,10 +68,6 @@ button:active {
   padding: 0 1rem;
 }
 
-#settings {
-  width: 34rem;
-}
-
 .setting {
   margin: 1rem 0;
   display: flex;
