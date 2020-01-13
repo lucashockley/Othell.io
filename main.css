@@ -9,6 +9,7 @@
 
 body {
   margin: 1rem;
+  margin-bottom: 8rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -45,20 +46,36 @@ button:active {
   margin: .75rem;
   padding: 1rem 2rem;
   background-color: var(--grey-dark);
-  border-radius: 10px;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--grey-light);
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background: #505050;
 }
 
 #game-section {
   display: flex;
+  height: 516px;
 }
 
 #history-container {
   padding: .25rem;
+  overflow-y: auto;
 }
 
 #history {
   margin: 1rem;
   border-collapse: collapse;
+  max-height: 200px;
 }
 
 th,

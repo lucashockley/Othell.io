@@ -20,7 +20,7 @@ const changeSetting = () => {
 }
 
 const info = document.getElementById('info');
-
+const historyTable = document.getElementById('history').firstElementChild;
 const boardDisplay = document.getElementById('board');
 
 const disk = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -141,6 +141,14 @@ const startGame = () => {
 
   game = new DisplayGame(darkPlayerType, lightPlayerType, darkDifficulty, lightDifficulty);
   game.displayScore();
+
+  let headings = historyTable.firstElementChild;
+  let firstRow = document.createElement('tr');
+  firstRow.appendChild(document.createElement('td'));
+  firstRow.firstElementChild.innerHTML = '1';
+  historyTable.innerHTML = '';
+  historyTable.appendChild(headings);
+  historyTable.appendChild(firstRow);
 
   info.innerHTML = `Dark's turn to move`;
 }

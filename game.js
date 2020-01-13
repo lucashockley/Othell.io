@@ -280,7 +280,7 @@ class DisplayGame extends Game {
 
   move(x, y) {
     super.move(x, y);
-    const historyTable = document.getElementById('history').firstElementChild;
+    const historyContainer = document.getElementById('history-container');
     let historyData = document.createElement('td');
     historyData.innerHTML = `${x}-${y}`;
     historyTable.lastElementChild.appendChild(historyData);
@@ -289,6 +289,7 @@ class DisplayGame extends Game {
       historyTable.lastElementChild.appendChild(document.createElement('td'));
       historyTable.lastElementChild.firstElementChild.innerHTML = this.history.length;
     }
+    historyContainer.scrollTop = historyContainer.scrollHeight;
   }
 
   userMove(x, y) {
