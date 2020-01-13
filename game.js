@@ -69,6 +69,11 @@ class Game {
     this.darkDifficulty = darkDifficulty;
     this.lightDifficulty = lightDifficulty;
 
+    this.history = [{
+      board: this.board,
+      move: null
+    }];
+
     this.running = true;
   }
 
@@ -107,6 +112,14 @@ class Game {
         }
       }
     }
+
+    this.history.push({
+      board: this.board,
+      move: {
+        x: x,
+        y: y
+      }
+    })
 
     this.turn *= -1;
   }
@@ -195,10 +208,10 @@ class Game {
 }
 
 class DisplayGame extends Game {
-  constructor(darkPlayerType, lightPlayerType, darkDifficulty, lightDifficulty, computerDelay) {
+  constructor(darkPlayerType, lightPlayerType, darkDifficulty, lightDifficulty) {
     super(darkDifficulty, lightDifficulty);
 
-    this.computerDelay = computerDelay;
+    this.computerDelay = 300;
 
     this.darkPlayer = darkPlayerType;
     this.lightPlayer = lightPlayerType;
@@ -262,6 +275,19 @@ class DisplayGame extends Game {
           document.getElementById(`${i}-${j}`).innerHTML = '';
         }
       }
+    }
+  }
+
+  move(x, y) {
+    super.move(x, y);
+    const historyTable = document.getElementById('history').firstElementChild;
+    let historyData = document.createElement('td');
+    historyData.innerHTML = `${x}-${y}`;
+    historyTable.lastElementChild.appendChild(historyData);
+    if (this.turn === -1) {
+      historyTable.appendChild(document.createElement('tr'));
+      historyTable.lastElementChild.appendChild(document.createElement('td'));
+      historyTable.lastElementChild.firstElementChild.innerHTML = this.history.length;
     }
   }
 

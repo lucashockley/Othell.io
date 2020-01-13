@@ -14,7 +14,32 @@
 <body>
   <button onclick="startGame()">Start Game</button>
 
-  <div id="board"></div>
+  <div id="game-section">
+    <div id="board"></div>
+    <div class="container" id="history-container">
+      <table id="history">
+        <tr>
+          <th></th>
+          <th>
+            <svg class="disk-dark icon" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 20 20"
+              stroke-width="2">
+              <circle cx="12" cy="12" r="7"></circle>
+            </svg>
+          </th>
+          <th>
+            <svg class="disk-light icon" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 20 20"
+              stroke-width="2">
+              <circle cx="12" cy="12" r="6"></circle>
+            </svg>
+          </th>
+        </tr>
+
+        <tr>
+          <td>1</td>
+        </tr>
+      </table>
+    </div>
+  </div>
 
   <div id="info" class="container">
     Configure the settings below, then press 'Start Game'

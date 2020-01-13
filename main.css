@@ -1,6 +1,6 @@
 :root {
   --grey-light: #303030;
-  --grey-dark: #1b1b1b;
+  --grey-dark: #1f1f1f;
   --light-disk-fill: #ffffff;
   --light-disk-stroke: #dbdbdb;
   --dark-disk-fill: #292929;
@@ -48,8 +48,26 @@ button:active {
   border-radius: 10px;
 }
 
+#game-section {
+  display: flex;
+}
+
+#history-container {
+  padding: .25rem;
+}
+
+#history {
+  margin: 1rem;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  text-align: center;
+  padding: .25rem .75rem;
+}
+
 #scores {
-  margin: .5rem;
   background-color: inherit;
   display: flex;
   justify-content: center;
