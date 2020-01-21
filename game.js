@@ -2,7 +2,11 @@ const inBoard = (x, y) => x > -1 && x < 8 && y > -1 && y < 8;
 
 const copyGame = (game) => {
   let newGame = new Game;
-  newGame.board = JSON.parse(JSON.stringify(game.board));
+  for (let i = 0; i < 8; i++) {
+    for (let j = 0; j < 8; j++) {
+      newGame.board[i][j].state = game.board[i][j].state;
+    }
+  }
   newGame.turn = game.turn;
   return newGame;
 }
@@ -51,11 +55,32 @@ const minimax = (position, move, depth, alpha, beta) => {
   return bestEvaluation;
 }
 
+class Cell {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.reference = String.fromCharCode(x + 97) + (y + 1);
+
+    this.state = 0;
+  }
+
+  flip() {
+    this.state = this.state *= -1;
+  }
+
+  isEmpty() {
+    return this.state === 0;
+  }
+}
+
 class Game {
   constructor(darkDifficulty, lightDifficulty) {
     this.board = [];
     for (let i = 0; i < 8; i++) {
-      this.board[i] = Array(8).fill(0);
+      this.board[i] = [];
+      for (let j = 0; j < 8; j++) {
+        this.board[i][j] = new Cell(i, j);
+      }
     }
 
     this.turn = 1;
@@ -73,16 +98,25 @@ class Game {
       board: this.board,
       move: null
     }];
-
-    this.running = true;
   }
 
   place(x, y) {
-    this.board[x][y] = this.turn;
+    this.board[x][y].state = this.turn;
   }
 
   flip(x, y) {
-    this.board[x][y] = this.board[x][y] === -1 ? 1 : -1;
+    this.board[x][y].flip();
+  }
+
+  updateHistory(x, y) {
+    this.history.push({
+      board: this.board,
+      move: {
+        x: x,
+        y: y
+      },
+      turn: this.turn
+    })
   }
 
   move(x, y) {
@@ -90,19 +124,19 @@ class Game {
 
     for (let i = x - 1; i < x + 2; i++) {
       for (let j = y - 1; j < y + 2; j++) {
-        if (inBoard(i, j) && this.board[i][j] === this.turn * -1) {
+        if (inBoard(i, j) && this.board[i][j].state === this.turn * -1) {
           let dx = i - x;
           let dy = j - y;
           let newX = x + dx;
           let newY = y + dy;
 
-          while (inBoard(newX, newY) && this.board[newX][newY] === this.turn * -1) {
+          while (inBoard(newX, newY) && this.board[newX][newY].state === this.turn * -1) {
             newX += dx;
             newY += dy;
           }
 
-          if (inBoard(newX, newY) && this.board[newX][newY] === this.turn) {
-            while (this.board[newX - dx][newY - dy] === this.turn * -1) {
+          if (inBoard(newX, newY) && this.board[newX][newY].state === this.turn) {
+            while (this.board[newX - dx][newY - dy].state === this.turn * -1) {
               this.flip(newX - dx, newY - dy);
 
               newX -= dx;
@@ -113,13 +147,7 @@ class Game {
       }
     }
 
-    this.history.push({
-      board: this.board,
-      move: {
-        x: x,
-        y: y
-      }
-    })
+    this.updateHistory(x, y);
 
     this.turn *= -1;
   }
@@ -127,21 +155,21 @@ class Game {
   isValidMove(x, y, side) {
     let result = false;
 
-    if (this.board[x][y] === 0) {
+    if (this.board[x][y].isEmpty()) {
       for (let i = x - 1; i < x + 2; i++) {
         for (let j = y - 1; j < y + 2; j++) {
-          if (inBoard(i, j) && this.board[i][j] === side * -1) {
+          if (inBoard(i, j) && this.board[i][j].state === side * -1) {
             let dx = i - x;
             let dy = j - y;
             let newX = x + dx;
             let newY = y + dy;
 
-            while (inBoard(newX, newY) && this.board[newX][newY] === side * -1) {
+            while (inBoard(newX, newY) && this.board[newX][newY].state === side * -1) {
               newX += dx;
               newY += dy;
             }
 
-            if (inBoard(newX, newY) && this.board[newX][newY] === side) {
+            if (inBoard(newX, newY) && this.board[newX][newY].state === side) {
               result = true;
             }
           }
@@ -177,9 +205,9 @@ class Game {
 
     for (let i = 0; i < 8; i++) {
       for (let j = 0; j < 8; j++) {
-        if (this.board[i][j] === -1) {
+        if (this.board[i][j].state === -1) {
           darkCount++;
-        } else if (this.board[i][j] === 1) {
+        } else if (this.board[i][j].state === 1) {
           lightCount++;
         }
       }
@@ -221,6 +249,8 @@ class DisplayGame extends Game {
     } else {
       setTimeout(this.computerMove.bind(this), this.computerDelay);
     }
+
+    this.running = true;
   }
 
   showValidMoves() {
@@ -229,7 +259,6 @@ class DisplayGame extends Game {
         if (this.isValidMove(i, j, this.turn)) {
           let cell = document.getElementById(`${i}-${j}`);
           let disk = (this.turn === -1 ? darkMove : lightMove).cloneNode(true);
-          cell.innerHTML = '';
           cell.appendChild(disk);
         }
       }
@@ -252,7 +281,6 @@ class DisplayGame extends Game {
       disk.style.animation = '';
     }
 
-    cell.innerHTML = '';
     cell.appendChild(disk);
   }
 
@@ -260,36 +288,47 @@ class DisplayGame extends Game {
     super.flip(x, y);
 
     let cell = document.getElementById(`${x}-${y}`);
-    let disk = cell.firstElementChild;
+    let disk = cell.lastElementChild;
 
-    disk.className.baseVal += this.board[x][y] === -1 ? ' flip-dark' : ' flip-light';
+    disk.className.baseVal += this.board[x][y].state === -1 ? ' flip-dark' : ' flip-light';
     disk.onanimationend = () => {
-      disk.className.baseVal = this.board[x][y] === -1 ? 'disk-dark' : 'disk-light';
+      disk.className.baseVal = this.board[x][y].state === -1 ? 'disk-dark' : 'disk-light';
     }
   }
 
   clearValidMoves() {
     for (let i = 0; i < 8; i++) {
       for (let j = 0; j < 8; j++) {
-        if (this.board[i][j] === 0) {
-          document.getElementById(`${i}-${j}`).innerHTML = '';
+        if (this.board[i][j].isEmpty()) {
+          const cell = document.getElementById(`${i}-${j}`);
+          if (cell.lastElementChild && cell.lastElementChild.classList.contains('disk')) {
+            cell.removeChild(cell.lastElementChild);
+          }
         }
       }
     }
   }
 
-  move(x, y) {
-    super.move(x, y);
+  addMoveToHistoryTable(cellReference) {
     const historyContainer = document.getElementById('history-container');
+
     let historyData = document.createElement('td');
-    historyData.innerHTML = `${x}-${y}`;
+    historyData.id = `move-${this.history.length - 1}`;
+    historyData.innerHTML = cellReference;
     historyTable.lastElementChild.appendChild(historyData);
-    if (this.turn === -1) {
+
+    if (this.turn === -1 && !this.isGameOver()) {
       historyTable.appendChild(document.createElement('tr'));
       historyTable.lastElementChild.appendChild(document.createElement('td'));
-      historyTable.lastElementChild.firstElementChild.innerHTML = this.history.length;
+      historyTable.lastElementChild.firstElementChild.innerHTML = Math.ceil(this.history.length / 2);
     }
+
     historyContainer.scrollTop = historyContainer.scrollHeight;
+  }
+
+  move(x, y) {
+    super.move(x, y);
+    this.addMoveToHistoryTable(String.fromCharCode(y + 97) + (x + 1));
   }
 
   userMove(x, y) {
@@ -330,6 +369,8 @@ class DisplayGame extends Game {
           }
         } else {
           this.turn *= -1;
+          this.updateHistory(null, null);
+          this.addMoveToHistoryTable('-');
           this.startNextTurn();
         }
       } else {

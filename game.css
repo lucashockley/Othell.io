@@ -9,11 +9,29 @@
 }
 
 .cell {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: #3dc45a;
   margin: 2px;
+}
+
+.ref {
+  font-size: .7rem;
+  font-weight: 600;
+  color: #1f6e30;
+  position: absolute;
+}
+
+.ref-x {
+  top: 40px;
+  left: 47px;
+}
+
+.ref-y {
+  left: 2px;
+  top: 0px;
 }
 
 .disk-dark {

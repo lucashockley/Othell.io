@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <link href="https://fonts.googleapis.com/css?family=Heebo:300,400,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Heebo:300,400,500&display=swap" rel="stylesheet">
   <script defer src="app.js"></script>
   <script defer src="game.js"></script>
   <link rel="stylesheet" href="main.css">
@@ -19,7 +19,7 @@
     <div class="container" id="history-container">
       <table id="history">
         <tr>
-          <th></th>
+          <th>#</th>
           <th>
             <svg class="disk-dark icon" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 20 20"
               stroke-width="2">
@@ -41,10 +41,6 @@
     </div>
   </div>
 
-  <div id="info" class="container">
-    Configure the settings below, then press 'Start Game'
-  </div>
-
   <div id="scores" class="container">
     <span id="dark-score" class="score">-</span>
     <svg class="disk-dark icon" xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24"
@@ -56,6 +52,10 @@
       <circle cx="12" cy="12" r="9"></circle>
     </svg>
     <span id="light-score" class="score">-</span>
+  </div>
+
+  <div id="info" class="container">
+    Configure the settings below and click 'Start Game'
   </div>
 
   <div id="settings" class="container">

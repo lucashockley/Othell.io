@@ -1,5 +1,6 @@
 :root {
-  --grey-light: #303030;
+  --grey-light: #2b2b2b;
+  --grey-lighter: #383838;
   --grey-dark: #1f1f1f;
   --light-disk-fill: #ffffff;
   --light-disk-stroke: #dbdbdb;
@@ -34,8 +35,14 @@ button {
   transition: 200ms;
 }
 
+h2 {
+  margin: .25rem;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
 button:hover {
-  background-color: var(--grey-light);
+  background-color: var(--grey-lighter);
 }
 
 button:active {
@@ -49,39 +56,42 @@ button:active {
   border-radius: 8px;
 }
 
-::-webkit-scrollbar {
-  width: 12px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--grey-light);
-}
-
-::-webkit-scrollbar-thumb {
-  border-radius: 8px;
-  background: #505050;
-}
-
 #game-section {
   display: flex;
-  height: 516px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 #history-container {
   padding: .25rem;
+  max-height: 420px;
   overflow-y: auto;
 }
 
 #history {
   margin: 1rem;
   border-collapse: collapse;
-  max-height: 200px;
 }
 
 th,
 td {
   text-align: center;
   padding: .25rem .75rem;
+}
+
+tr:nth-child(even) {
+  background-color: var(--grey-light);
+}
+
+td:hover {
+  background-color: var(--grey-lighter);
+  cursor: pointer;
+}
+
+td:nth-child(1):hover {
+  background-color: initial;
+  cursor: initial;
 }
 
 #scores {
@@ -101,6 +111,10 @@ td {
 
 .icon {
   padding: 0 1rem;
+}
+
+#settings {
+  text-align: center;
 }
 
 .setting {
@@ -138,4 +152,16 @@ td {
 
 #dark-difficulty {
   display: none;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--grey-light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #464646;
 }

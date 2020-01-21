@@ -37,18 +37,18 @@ circle.setAttribute('r', '9');
 disk.appendChild(circle);
 
 const darkDisk = disk.cloneNode(true);
-darkDisk.className.baseVal = 'disk-dark';
+darkDisk.className.baseVal = 'disk disk-dark';
 
 const lightDisk = disk.cloneNode(true);
-lightDisk.className.baseVal = 'disk-light';
+lightDisk.className.baseVal = 'disk disk-light';
 
 let darkMove = disk.cloneNode(true);
 darkMove.firstChild.setAttribute('onclick', 'selectMove()')
-darkMove.className.baseVal = 'move-dark';
+darkMove.className.baseVal = 'disk move-dark';
 
 let lightMove = disk.cloneNode(true);
 lightMove.firstChild.setAttribute('onclick', 'selectMove()')
-lightMove.className.baseVal = 'move-light';
+lightMove.className.baseVal = 'disk move-light';
 
 const createCells = () => {
   boardDisplay.innerHTML = '';
@@ -57,6 +57,18 @@ const createCells = () => {
       let cell = document.createElement('div');
       cell.className = 'cell';
       cell.id = `${i}-${j}`;
+      if (j === 0) {
+        let reference = document.createElement('span');
+        reference.className = 'ref ref-y';
+        reference.innerHTML = i + 1;
+        cell.appendChild(reference);
+      }
+      if (i === 7) {
+        let reference = document.createElement('span');
+        reference.className = 'ref ref-x';
+        reference.innerHTML = String.fromCharCode(j + 97);
+        cell.appendChild(reference);
+      }
       boardDisplay.appendChild(cell);
     }
   }
@@ -165,9 +177,9 @@ function gameOver() {
   let lightCount = game.diskCount.light;
 
   if (darkCount > lightCount) {
-    info.innerHTML = `Dark wins the game, beating light ${darkCount} to ${lightCount}`;
+    info.innerHTML = `Dark wins the game, beating light ${darkCount} - ${lightCount}`;
   } else if (darkCount < lightCount) {
-    info.innerHTML = `Light wins the game, beating dark ${lightCount} to ${darkCount}`;
+    info.innerHTML = `Light wins the game, beating dark ${lightCount} - ${darkCount}`;
   } else {
     info.innerHTML = 'The game is a draw';
   }
