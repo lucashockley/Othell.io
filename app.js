@@ -1,21 +1,114 @@
+let darkPlayerType = 'user';
+let lightPlayerType = 'computer';
+let lightDifficulty = darkDifficulty = {
+  depth: 2
+};
+let timer = false;
+let timerLength = 5;
+
+const timerSetting = document.getElementById('timer-enabled');
+const timerLengthSetting = document.getElementById('timer-length');
+
+const setDifficulty = (side, difficulty) => {
+  switch (difficulty) {
+    case 'Beginner':
+      side.depth = 1;
+      break;
+
+    case 'Intermediate':
+      side.depth = 2;
+      break;
+
+    case 'Expert':
+      side.depth = 4;
+      break;
+
+    case 'Master':
+      side.depth = 8;
+      break;
+  }
+}
+
+const displayTimerSettings = () => {
+  if (darkPlayerType === 'user' && lightPlayerType === 'user') {
+    timerSetting.style.display = 'flex';
+    if (timer) {
+      timerLengthSetting.style.display = 'flex';
+      document.getElementById('dark-timer').innerHTML = `${timerLength}:00`;
+      document.getElementById('light-timer').innerHTML = `${timerLength}:00`;
+    }
+  } else {
+    document.getElementById('dark-timer').innerHTML = '-';
+    document.getElementById('light-timer').innerHTML = '-';
+    timerSetting.style.display = 'none';
+    timerLengthSetting.style.display = 'none';
+  }
+}
+
+const displayDifficultySettings = (side, settings) => {
+  if (side === 'computer') {
+    settings.style.display = 'flex';
+  } else {
+    settings.style.display = 'none';
+  }
+}
+
 const changeSetting = () => {
   if (!event.target.classList.contains('selected')) {
-    let options = event.path[1].getElementsByClassName('option');
-    for (const option of options) {
+    let path = event.path;
+    for (const option of path[1].children) {
       option.classList.remove('selected');
     }
-    event.target.classList.add('selected');
+    path[0].classList.add('selected');
 
-    if (document.getElementById('dark-computer').classList.contains('selected')) {
-      document.getElementById('dark-difficulty').style.display = 'flex';
-    } else {
-      document.getElementById('dark-difficulty').style.display = 'none';
+    switch (path[2].id) {
+      case 'dark-player':
+        darkPlayerType = path[0].innerHTML === 'Human' ? 'user' : 'computer';
+        displayTimerSettings();
+        displayDifficultySettings(darkPlayerType, document.getElementById('dark-difficulty'));
+        break;
+
+      case 'dark-difficulty':
+        setDifficulty(darkDifficulty, path[0].innerHTML);
+        break;
+
+      case 'light-player':
+        lightPlayerType = path[0].innerHTML === 'Human' ? 'user' : 'computer';
+        displayTimerSettings();
+        displayDifficultySettings(lightPlayerType, document.getElementById('light-difficulty'));
+        break;
+
+      case 'light-difficulty':
+        setDifficulty(lightDifficulty, path[0].innerHTML);
+        break;
+
+      case 'timer-enabled':
+        timer = path[0].innerHTML === 'Enabled' ? true : false;
+        if (timer) {
+          timerLengthSetting.style.display = 'flex';
+          document.getElementById('dark-timer').innerHTML = `${timerLength}:00`;
+          document.getElementById('light-timer').innerHTML = `${timerLength}:00`;
+        } else {
+          timerLengthSetting.style.display = 'none';
+          document.getElementById('dark-timer').innerHTML = '-';
+          document.getElementById('light-timer').innerHTML = '-';
+        }
+        break;
+
+      case 'timer-length':
+        timerLength = path[0].innerHTML.split(':')[0];
+        document.getElementById('dark-timer').innerHTML = `${timerLength}:00`;
+        document.getElementById('light-timer').innerHTML = `${timerLength}:00`;
+        break;
     }
-    if (document.getElementById('light-computer').classList.contains('selected')) {
-      document.getElementById('light-difficulty').style.display = 'flex';
-    } else {
-      document.getElementById('light-difficulty').style.display = 'none';
-    }
+  }
+}
+
+const settingsDiv = document.getElementById('settings');
+
+for (const setting of settingsDiv.children) {
+  for (const option of setting.lastElementChild.children) {
+    option.addEventListener('click', changeSetting);
   }
 }
 
@@ -89,69 +182,7 @@ const startGame = () => {
     createCells();
   }
 
-  let settings = document.getElementById('settings');
-  let darkPlayerType;
-  let lightPlayerType;
-  let darkDifficulty;
-  let lightDifficulty;
-
-  for (const option of settings.children[0].lastElementChild.children) {
-    if (option.classList.contains('selected')) {
-      darkPlayerType = option.innerHTML === 'Human' ? 'user' : 'computer';
-    }
-  }
-
-  for (const option of settings.children[2].lastElementChild.children) {
-    if (option.classList.contains('selected')) {
-      lightPlayerType = option.innerHTML === 'Human' ? 'user' : 'computer';
-    }
-  }
-
-  for (const option of settings.children[1].lastElementChild.children) {
-    if (option.classList.contains('selected')) {
-      switch (option.innerHTML) {
-        case 'Beginner':
-          darkDifficulty = 1;
-          break;
-
-        case 'Intermediate':
-          darkDifficulty = 2;
-          break;
-
-        case 'Expert':
-          darkDifficulty = 4
-          break;
-
-        case 'Master':
-          darkDifficulty = 8;
-          break;
-      }
-    }
-  }
-
-  for (const option of settings.children[3].lastElementChild.children) {
-    if (option.classList.contains('selected')) {
-      switch (option.innerHTML) {
-        case 'Beginner':
-          lightDifficulty = 1;
-          break;
-
-        case 'Intermediate':
-          lightDifficulty = 2;
-          break;
-
-        case 'Expert':
-          lightDifficulty = 4
-          break;
-
-        case 'Master':
-          lightDifficulty = 8;
-          break;
-      }
-    }
-  }
-
-  game = new DisplayGame(darkPlayerType, lightPlayerType, darkDifficulty, lightDifficulty);
+  game = new DisplayGame(darkPlayerType, lightPlayerType, darkDifficulty.depth, lightDifficulty.depth, timer, timerLength);
   game.displayScore();
 
   let headings = historyTable.firstElementChild;
@@ -164,6 +195,8 @@ const startGame = () => {
 
   info.innerHTML = `Dark's turn to move`;
 }
+
+document.getElementById('start').addEventListener('click', startGame);
 
 const selectMove = () => {
   let x = Number(event.path[2].id[0]);

@@ -236,8 +236,13 @@ class Game {
 }
 
 class DisplayGame extends Game {
-  constructor(darkPlayerType, lightPlayerType, darkDifficulty, lightDifficulty) {
+  constructor(darkPlayerType, lightPlayerType, darkDifficulty, lightDifficulty, timer, timerLength) {
     super(darkDifficulty, lightDifficulty);
+
+    this.timer = timer;
+    if (this.timer) {
+      this.timerLength = timerLength;
+    }
 
     this.computerDelay = 300;
 

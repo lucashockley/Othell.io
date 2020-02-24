@@ -12,7 +12,7 @@
 </head>
 
 <body>
-  <button onclick="startGame()">Start Game</button>
+  <button id="start">Start Game</button>
 
   <div id="game-section">
     <div id="board"></div>
@@ -42,6 +42,7 @@
   </div>
 
   <div id="scores" class="container">
+    <span id="dark-timer" class="timer">-</span>
     <span id="dark-score" class="score">-</span>
     <svg class="disk-dark icon" xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24"
       stroke-width="2">
@@ -52,6 +53,7 @@
       <circle cx="12" cy="12" r="9"></circle>
     </svg>
     <span id="light-score" class="score">-</span>
+    <span id="light-timer" class="timer">-</span>
   </div>
 
   <div id="info" class="container">
@@ -59,36 +61,57 @@
   </div>
 
   <div id="settings" class="container">
-    <div class="setting">
+    <div id="dark-player" class="setting">
       <label>Dark Player</label>
       <div class="options">
-        <span class="option selected" onclick="changeSetting()">Human</span>
-        <span id="dark-computer" class="option" onclick="changeSetting()">Computer</span>
+        <span class="option selected">Human</span>
+        <span class="option">Computer</span>
       </div>
     </div>
+
     <div id="dark-difficulty" class="setting">
       <label>Dark Computer Difficulty</label>
       <div class="options">
-        <span class="option" onclick="changeSetting()">Beginner</span>
-        <span class="option selected" onclick="changeSetting()">Intermediate</span>
-        <span class="option" onclick="changeSetting()">Expert</span>
-        <span class="option" onclick="changeSetting()">Master</span>
+        <span class="option">Beginner</span>
+        <span class="option selected">Intermediate</span>
+        <span class="option">Expert</span>
+        <span class="option">Master</span>
       </div>
     </div>
-    <div class="setting">
+
+    <div id="light-player" class="setting">
       <label>Light Player</label>
       <div class="options">
-        <span class="option" onclick="changeSetting()">Human</span>
-        <span id="light-computer" class="option selected" onclick="changeSetting()">Computer</span>
+        <span class="option">Human</span>
+        <span class="option selected">Computer</span>
       </div>
     </div>
+
     <div id="light-difficulty" class="setting">
       <label>Light Computer Difficulty</label>
       <div class="options">
-        <span class="option" onclick="changeSetting()">Beginner</span>
-        <span class="option selected" onclick="changeSetting()">Intermediate</span>
-        <span class="option" onclick="changeSetting()">Expert</span>
-        <span class="option" onclick="changeSetting()">Master</span>
+        <span class="option">Beginner</span>
+        <span class="option selected">Intermediate</span>
+        <span class="option">Expert</span>
+        <span class="option">Master</span>
+      </div>
+    </div>
+
+    <div id="timer-enabled" class="setting">
+      <label>Timer</label>
+      <div class="options">
+        <span class="option">Enabled</span>
+        <span class="option selected">Disabled</span>
+      </div>
+    </div>
+
+    <div id="timer-length" class="setting">
+      <label>Timer Length</label>
+      <div class="options">
+        <span class="option">1:00</span>
+        <span class="option selected">5:00</span>
+        <span class="option">10:00</span>
+        <span class="option">30:00</span>
       </div>
     </div>
   </div>
