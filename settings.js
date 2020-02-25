@@ -1,3 +1,4 @@
+// Define default settings
 let darkPlayerType = 'user';
 let lightPlayerType = 'computer';
 let lightDifficulty = darkDifficulty = {
@@ -6,7 +7,8 @@ let lightDifficulty = darkDifficulty = {
 let timer = false;
 let timerLength = 5;
 
-const setDifficulty = (side, difficulty) => {
+// Set search depth
+const setDepth = (side, difficulty) => {
   switch (difficulty) {
     case 'Beginner':
       side.depth = 1;
@@ -26,14 +28,19 @@ const setDifficulty = (side, difficulty) => {
   }
 }
 
+// Update setting values and GUI after user changes a setting
 const changeSetting = () => {
+  // If the setting isn't already selected
   if (!event.target.classList.contains('selected')) {
     let path = event.path;
+
+    // Add CSS class to selected option
     for (const option of path[1].children) {
       option.classList.remove('selected');
     }
     path[0].classList.add('selected');
 
+    // Update settings
     switch (path[2].id) {
       case 'dark-player':
         darkPlayerType = path[0].innerHTML === 'Human' ? 'user' : 'computer';
@@ -42,7 +49,7 @@ const changeSetting = () => {
         break;
 
       case 'dark-difficulty':
-        setDifficulty(darkDifficulty, path[0].innerHTML);
+        setDepth(darkDifficulty, path[0].innerHTML);
         break;
 
       case 'light-player':
@@ -52,28 +59,26 @@ const changeSetting = () => {
         break;
 
       case 'light-difficulty':
-        setDifficulty(lightDifficulty, path[0].innerHTML);
+        setDepth(lightDifficulty, path[0].innerHTML);
         break;
 
       case 'timer-enabled':
         timer = path[0].innerHTML === 'Enabled' ? true : false;
         if (timer) {
           timerLengthSetting.style.display = 'flex';
-          setTimers(`${timerLength}:00`);
         } else {
           timerLengthSetting.style.display = 'none';
-          setTimers('-');
         }
         break;
 
       case 'timer-length':
         timerLength = path[0].innerHTML.split(':')[0];
-        setTimers(`${timerLength}:00`);
         break;
     }
   }
 }
 
+// Add event listeners to each option
 const settingsDiv = document.getElementById('settings');
 
 for (const setting of settingsDiv.children) {

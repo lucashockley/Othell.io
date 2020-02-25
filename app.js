@@ -1,17 +1,21 @@
+const information = document.getElementById('information');
+const historyTable = document.getElementById('history').firstElementChild;
+const boardDisplay = document.getElementById('board');
+
+const darkTimerDisplay = document.getElementById('dark-timer');
+const lightTimerDisplay = document.getElementById('light-timer');
+
 const timerEnableSetting = document.getElementById('timer-enabled');
 const timerLengthSetting = document.getElementById('timer-length');
 
 const displayTimerSettings = () => {
+  // If both players are human, show timer settings
   if (darkPlayerType === 'user' && lightPlayerType === 'user') {
     timerEnableSetting.style.display = 'flex';
     if (timer) {
       timerLengthSetting.style.display = 'flex';
-      document.getElementById('dark-timer').innerHTML = `${timerLength}:00`;
-      document.getElementById('light-timer').innerHTML = `${timerLength}:00`;
     }
   } else {
-    document.getElementById('dark-timer').innerHTML = '-';
-    document.getElementById('light-timer').innerHTML = '-';
     timerEnableSetting.style.display = 'none';
     timerLengthSetting.style.display = 'none';
   }
@@ -25,22 +29,17 @@ const displayDifficultySettings = (side, settings) => {
   }
 }
 
-const setTimers = value => {
-  document.getElementById('dark-timer').innerHTML = value;
-  document.getElementById('light-timer').innerHTML = value;
-}
-
-const information = document.getElementById('information');
-const historyTable = document.getElementById('history').firstElementChild;
-const boardDisplay = document.getElementById('board');
-
 const createCells = () => {
+  // Clear board  
   boardDisplay.innerHTML = '';
+
   for (let i = 0; i < 8; i++) {
     for (let j = 0; j < 8; j++) {
       let cell = document.createElement('div');
       cell.className = 'cell';
       cell.id = `${i}-${j}`;
+
+      // Add cell references to edge cells
       if (j === 0) {
         let reference = document.createElement('span');
         reference.className = 'ref ref-y';
@@ -58,9 +57,9 @@ const createCells = () => {
   }
 }
 
-createCells();
-
-let game;
+const updateTimerDisplay = (side, value) => {
+  side.innerHTML = value;
+}
 
 const displayScore = () => {
   document.getElementById('dark-score').innerHTML = game.getDiskCount().dark;
@@ -68,6 +67,7 @@ const displayScore = () => {
 }
 
 const startGame = () => {
+  // Stop current game from running
   if (game) {
     game.running = false;
     createCells();
@@ -76,6 +76,7 @@ const startGame = () => {
   game = new DisplayGame(darkPlayerType, lightPlayerType, darkDifficulty.depth, lightDifficulty.depth, timer, timerLength);
   game.displayScore();
 
+  // Reset history table
   let headings = historyTable.firstElementChild;
   let firstRow = document.createElement('tr');
   firstRow.appendChild(document.createElement('td'));
@@ -89,6 +90,7 @@ const startGame = () => {
 
 document.getElementById('start').addEventListener('click', startGame);
 
+// Called when user clicks on a move indicator
 const selectMove = () => {
   let x = Number(event.path[2].id[0]);
   let y = Number(event.path[2].id[2]);
@@ -100,6 +102,7 @@ function gameOver() {
   let darkCount = game.diskCount.dark;
   let lightCount = game.diskCount.light;
 
+  // Display game outcome
   if (darkCount > lightCount) {
     information.innerHTML = `Dark wins the game, beating light ${darkCount} - ${lightCount}`;
   } else if (darkCount < lightCount) {
@@ -108,3 +111,8 @@ function gameOver() {
     information.innerHTML = 'The game is a draw';
   }
 }
+
+// Initial call to create an empty board
+createCells();
+
+let game;

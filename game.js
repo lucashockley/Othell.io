@@ -156,25 +156,31 @@ class Game {
 
       this.turn *= -1;
     } else {
-      console.error(`Invalid move`);
+      console.error('Invalid move');
     }
   }
 
   isValidMove(x, y, side) {
     if (this.board[x][y].isEmpty()) {
+      // For each cell surrounding the target cell
       for (let i = x - 1; i <= x + 1; i++) {
         for (let j = y - 1; j <= y + 1; j++) {
+          // If the cell contains a disk of the opposite colour
           if (inBoardBoundary(i, j) && this.board[i][j].state === side * -1) {
+            // Calculate the horizontal and vertical distance to the disk
             let dx = i - x;
             let dy = j - y;
             let newX = x + dx;
             let newY = y + dy;
 
+            // Traverse the board in the direction of the disk until there is no disk of the
+            // opposite colour occupying the cell
             while (inBoardBoundary(newX, newY) && this.board[newX][newY].state === side * -1) {
               newX += dx;
               newY += dy;
             }
 
+            // If the new cell contains a disk of the current player's colour, the move is valid
             if (inBoardBoundary(newX, newY) && this.board[newX][newY].state === side) {
               return true;
             }
@@ -235,7 +241,9 @@ class Game {
   computerMove() {
     // Set search depth
     let difficulty = this.turn === -1 ? this.darkDifficulty : this.lightDifficulty;
+    // Use the Minimax algorithm to determine coordinates of next move
     let move = minimax(this, null, difficulty, -64, 64).move;
+    // Apply the move
     this.move(move.x, move.y);
   }
 }
@@ -244,9 +252,14 @@ class DisplayGame extends Game {
   constructor(darkPlayerType, lightPlayerType, darkDifficulty, lightDifficulty, timer, timerLength) {
     super(darkDifficulty, lightDifficulty);
 
-    this.timer = timer;
-    if (this.timer) {
-      this.timerLength = timerLength;
+    if (timer) {
+      this.timer = true;
+
+      this.darkTimer = new Timer(timerLength);
+      this.lightTimer = new Timer(timerLength);
+
+      updateTimerDisplay(darkTimerDisplay, this.darkTimer.formatTime());
+      updateTimerDisplay(lightTimerDisplay, this.lightTimer.formatTime());
     }
 
     this.computerDelay = 300;
@@ -327,7 +340,7 @@ class DisplayGame extends Game {
     historyData.innerHTML = cellReference;
     historyTable.lastElementChild.appendChild(historyData);
 
-    // Create a new table row every other turn
+    // Create a new table row after every other turn
     if (this.turn === -1 && !this.isGameOver()) {
       historyTable.appendChild(document.createElement('tr'));
       historyTable.lastElementChild.appendChild(document.createElement('td'));
@@ -338,9 +351,11 @@ class DisplayGame extends Game {
   }
 
   move(x, y) {
-    super.move(x, y);
     if (this.isValidMove(x, y, this.turn)) {
+      super.move(x, y);
       this.addMoveToHistoryTable(String.fromCharCode(y + 97) + (x + 1));
+    } else {
+      console.error('Invalid move')
     }
   }
 
