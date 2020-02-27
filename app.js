@@ -57,10 +57,6 @@ const createCells = () => {
   }
 }
 
-const updateTimerDisplay = (side, value) => {
-  side.innerHTML = value;
-}
-
 const displayScore = () => {
   document.getElementById('dark-score').innerHTML = game.getDiskCount().dark;
   document.getElementById('light-score').innerHTML = game.getDiskCount().light;
@@ -110,6 +106,16 @@ function gameOver() {
   } else {
     information.innerHTML = 'The game is a draw';
   }
+
+  if (game.timer) {
+    if (game.darkTimer.value <= 0) {
+      information.innerHTML = 'Light wins the game as dark ran out of time';
+    } else if (game.lightTimer.value <= 0) {
+      information.innerHTML = 'Dark wins the game as light ran out of time';
+    }
+  }
+
+  game.clearValidMoves();
 }
 
 // Initial call to create an empty board

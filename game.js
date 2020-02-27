@@ -255,11 +255,13 @@ class DisplayGame extends Game {
     if (timer) {
       this.timer = true;
 
-      this.darkTimer = new Timer(timerLength);
-      this.lightTimer = new Timer(timerLength);
+      this.darkTimer = new Timer('dark', timerLength);
+      this.lightTimer = new Timer('light', timerLength);
 
-      updateTimerDisplay(darkTimerDisplay, this.darkTimer.formatTime());
-      updateTimerDisplay(lightTimerDisplay, this.lightTimer.formatTime());
+      this.darkTimer.updateDisplay();
+      this.lightTimer.updateDisplay();
+
+      this.darkTimer.start();
     }
 
     this.computerDelay = 300;
@@ -360,6 +362,9 @@ class DisplayGame extends Game {
   }
 
   userMove(x, y) {
+    if (timer) {
+      this.turn === -1 ? this.darkTimer.stop() : this.lightTimer.stop();
+    }
     this.clearValidMoves();
     super.userMove(x, y);
     this.startNextTurn();
@@ -382,6 +387,7 @@ class DisplayGame extends Game {
             if (this.darkPlayer === 'user') {
               information.innerHTML = `Dark's turn to move`;
               this.showValidMoves();
+              this.darkTimer.start();
             } else {
               information.innerHTML = 'Dark is thinking of a move...';
               setTimeout(this.computerMove.bind(this), this.computerDelay);
@@ -390,6 +396,7 @@ class DisplayGame extends Game {
             if (this.lightPlayer === 'user') {
               information.innerHTML = `Light's turn to move`;
               this.showValidMoves();
+              this.lightTimer.start();
             } else {
               information.innerHTML = 'Light is thinking of a move...';
               setTimeout(this.computerMove.bind(this), this.computerDelay);

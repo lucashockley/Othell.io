@@ -2,18 +2,20 @@ class Timer {
   constructor(side, startLength) {
     this.display = side === 'dark' ? darkTimerDisplay : lightTimerDisplay;
     this.startLength = startLength;
-    this.value = this.startLength * 60;
+    this.value = this.startLength * 60 * 1000;
     this.countdown;
   }
 
   start() {
     this.countdown = setInterval(() => {
       if (this.value > 0) {
-        this.value--;
+        this.value -= 100;
       } else {
         this.stop();
+        gameOver();
       }
-    }, 1000)
+      this.updateDisplay();
+    }, 100)
   }
 
   stop() {
@@ -21,13 +23,17 @@ class Timer {
   }
 
   formatTime() {
-    let minutes = Math.floor(this.value / 60).toString();
-    let seconds = Math.round(this.value % 60).toString();
+    let minutes = Math.floor(this.value / 1000 / 60).toString();
+    let seconds = Math.floor(this.value / 1000 % 60).toString();
 
     if (seconds.length === 1) {
       seconds = `0${seconds}`;
     }
 
     return `${minutes}:${seconds}`;
+  }
+
+  updateDisplay() {
+    this.display.innerHTML = this.formatTime();
   }
 }

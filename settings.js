@@ -4,8 +4,8 @@ let lightPlayerType = 'computer';
 let lightDifficulty = darkDifficulty = {
   depth: 2
 };
-let timer = false;
-let timerLength = 5;
+let timer = true;
+let timerLength = 0.1;
 
 // Set search depth
 const setDepth = (side, difficulty) => {
