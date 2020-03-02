@@ -1,71 +1,3 @@
-const inBoardBoundary = (x, y) => x >= 0 && x < 8 && y >= 0 && y < 8;
-
-const copyGame = game => {
-  let newGame = new Game;
-
-  // Copy information from game to newGame
-  for (let i = 0; i < 8; i++) {
-    for (let j = 0; j < 8; j++) {
-      newGame.board[i][j].state = game.board[i][j].state;
-    }
-  }
-  newGame.turn = game.turn;
-
-  return newGame;
-}
-
-const minimax = (position, move, depth, alpha, beta) => {
-  // If the maximum depth is reached, or there are no valid moves left, 
-  // return the static evaluation of the current position
-  if (depth === 0 || position.getValidMoves(position.turn).length === 0) {
-    return {
-      evaluation: position.getStaticEvaluation(),
-      move: move
-    }
-  }
-
-  let bestEvaluation;
-  let moves = position.getValidMoves(position.turn);
-
-  for (const nextMove of moves) {
-    let nextPosition = copyGame(position);
-    nextPosition.move(nextMove.x, nextMove.y);
-
-    // Evaluate the new position
-    let newEvaluation = minimax(nextPosition, nextMove, depth - 1, alpha, beta);
-
-    // Compare the new evaluation to the current best evaluation
-    if (position.turn === -1) {
-      if (!bestEvaluation || newEvaluation.evaluation > bestEvaluation.evaluation) {
-        bestEvaluation = {
-          evaluation: newEvaluation.evaluation,
-          move: nextMove
-        }
-      }
-
-      // Update alpha value
-      alpha = Math.max(alpha, newEvaluation.evaluation);
-    } else {
-      if (!bestEvaluation || newEvaluation.evaluation < bestEvaluation.evaluation) {
-        bestEvaluation = {
-          evaluation: newEvaluation.evaluation,
-          move: nextMove
-        }
-      }
-
-      // Update beta value
-      beta = Math.min(beta, newEvaluation.evaluation);
-    }
-
-    // Prune the current branch if a better evaluation has already been found
-    if (beta <= alpha) {
-      break;
-    }
-  }
-
-  return bestEvaluation;
-}
-
 class Game {
   constructor(darkDifficulty, lightDifficulty) {
     // Create a 2D array of 64 cells to represent the board
@@ -82,6 +14,7 @@ class Game {
     this.place(3, 3);
     this.place(4, 4);
 
+    // Set starting turn to dark
     this.turn = -1;
     this.place(3, 4);
     this.place(4, 3);
@@ -94,6 +27,74 @@ class Game {
       board: this.board,
       move: null
     }];
+  }
+
+  static inBoardBoundary = (x, y) => x >= 0 && x < 8 && y >= 0 && y < 8;
+
+  static minimax = (position, move, depth, alpha, beta) => {
+    // If the maximum depth is reached, or there are no valid moves left, 
+    // return the static evaluation of the current position
+    if (depth === 0 || position.getValidMoves(position.turn).length === 0) {
+      return {
+        evaluation: position.getStaticEvaluation(),
+        move: move
+      }
+    }
+
+    let bestEvaluation;
+    let moves = position.getValidMoves(position.turn);
+
+    for (const nextMove of moves) {
+      let nextPosition = position.copy();
+      nextPosition.move(nextMove.x, nextMove.y);
+
+      // Evaluate the new position
+      let newEvaluation = Game.minimax(nextPosition, nextMove, depth - 1, alpha, beta);
+
+      // Compare the new evaluation to the current best evaluation
+      if (position.turn === -1) {
+        if (!bestEvaluation || newEvaluation.evaluation > bestEvaluation.evaluation) {
+          bestEvaluation = {
+            evaluation: newEvaluation.evaluation,
+            move: nextMove
+          }
+        }
+
+        // Update alpha value
+        alpha = Math.max(alpha, newEvaluation.evaluation);
+      } else {
+        if (!bestEvaluation || newEvaluation.evaluation < bestEvaluation.evaluation) {
+          bestEvaluation = {
+            evaluation: newEvaluation.evaluation,
+            move: nextMove
+          }
+        }
+
+        // Update beta value
+        beta = Math.min(beta, newEvaluation.evaluation);
+      }
+
+      // Prune the current branch if an equal or better evaluation has already been found
+      if (beta <= alpha) {
+        break;
+      }
+    }
+
+    return bestEvaluation;
+  }
+
+  copy() {
+    let newGame = new Game;
+
+    // Copy information from game to newGame
+    for (let i = 0; i < 8; i++) {
+      for (let j = 0; j < 8; j++) {
+        newGame.board[i][j].state = this.board[i][j].state;
+      }
+    }
+    newGame.turn = this.turn;
+
+    return newGame;
   }
 
   place(x, y) {
@@ -124,7 +125,7 @@ class Game {
       for (let i = x - 1; i <= x + 1; i++) {
         for (let j = y - 1; j <= y + 1; j++) {
           // If the cell contains a disk of the opposite colour
-          if (inBoardBoundary(i, j) && this.board[i][j].state === this.turn * -1) {
+          if (Game.inBoardBoundary(i, j) && this.board[i][j].state === this.turn * -1) {
             // Calculate the horizontal and vertical distance to the disk
             let dx = i - x;
             let dy = j - y;
@@ -133,14 +134,14 @@ class Game {
 
             // Traverse the board in the direction of the disk until there is no disk of the
             // opposite colour occupying the cell
-            while (inBoardBoundary(newX, newY) && this.board[newX][newY].state === this.turn * -1) {
+            while (Game.inBoardBoundary(newX, newY) && this.board[newX][newY].state === this.turn * -1) {
               newX += dx;
               newY += dy;
             }
 
             // If the cell contains a disk of the current player's colour, traverse back to the target cell,
             // flipping each disk to the current player's side
-            if (inBoardBoundary(newX, newY) && this.board[newX][newY].state === this.turn) {
+            if (Game.inBoardBoundary(newX, newY) && this.board[newX][newY].state === this.turn) {
               while (this.board[newX - dx][newY - dy].state === this.turn * -1) {
                 this.flip(newX - dx, newY - dy);
 
@@ -166,7 +167,7 @@ class Game {
       for (let i = x - 1; i <= x + 1; i++) {
         for (let j = y - 1; j <= y + 1; j++) {
           // If the cell contains a disk of the opposite colour
-          if (inBoardBoundary(i, j) && this.board[i][j].state === side * -1) {
+          if (Game.inBoardBoundary(i, j) && this.board[i][j].state === side * -1) {
             // Calculate the horizontal and vertical distance to the disk
             let dx = i - x;
             let dy = j - y;
@@ -175,13 +176,13 @@ class Game {
 
             // Traverse the board in the direction of the disk until there is no disk of the
             // opposite colour occupying the cell
-            while (inBoardBoundary(newX, newY) && this.board[newX][newY].state === side * -1) {
+            while (Game.inBoardBoundary(newX, newY) && this.board[newX][newY].state === side * -1) {
               newX += dx;
               newY += dy;
             }
 
             // If the new cell contains a disk of the current player's colour, the move is valid
-            if (inBoardBoundary(newX, newY) && this.board[newX][newY].state === side) {
+            if (Game.inBoardBoundary(newX, newY) && this.board[newX][newY].state === side) {
               return true;
             }
           }
@@ -242,7 +243,7 @@ class Game {
     // Set search depth
     let difficulty = this.turn === -1 ? this.darkDifficulty : this.lightDifficulty;
     // Use the Minimax algorithm to determine coordinates of next move
-    let move = minimax(this, null, difficulty, -64, 64).move;
+    let move = Game.minimax(this, null, difficulty, -64, 64).move;
     // Apply the move
     this.move(move.x, move.y);
   }
@@ -255,8 +256,8 @@ class DisplayGame extends Game {
     if (timer) {
       this.timer = true;
 
-      this.darkTimer = new Timer('dark', timerLength);
-      this.lightTimer = new Timer('light', timerLength);
+      this.darkTimer = new Timer('dark', timerLength, this);
+      this.lightTimer = new Timer('light', timerLength, this);
 
       this.darkTimer.updateDisplay();
       this.lightTimer.updateDisplay();
@@ -387,7 +388,9 @@ class DisplayGame extends Game {
             if (this.darkPlayer === 'user') {
               information.innerHTML = `Dark's turn to move`;
               this.showValidMoves();
-              this.darkTimer.start();
+              if (this.timer) {
+                this.darkTimer.start();
+              }
             } else {
               information.innerHTML = 'Dark is thinking of a move...';
               setTimeout(this.computerMove.bind(this), this.computerDelay);
@@ -396,7 +399,9 @@ class DisplayGame extends Game {
             if (this.lightPlayer === 'user') {
               information.innerHTML = `Light's turn to move`;
               this.showValidMoves();
-              this.lightTimer.start();
+              if (this.timer) {
+                this.lightTimer.start();
+              }
             } else {
               information.innerHTML = 'Light is thinking of a move...';
               setTimeout(this.computerMove.bind(this), this.computerDelay);

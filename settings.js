@@ -4,8 +4,10 @@ let lightPlayerType = 'computer';
 let lightDifficulty = darkDifficulty = {
   depth: 2
 };
-let timer = true;
-let timerLength = 0.1;
+// Keep track if user has timer enabled in settings
+let timerSelected = false;
+let timer = false;
+let timerLength = 5;
 
 // Set search depth
 const setDepth = (side, difficulty) => {
@@ -66,8 +68,10 @@ const changeSetting = () => {
         timer = path[0].innerHTML === 'Enabled' ? true : false;
         if (timer) {
           timerLengthSetting.style.display = 'flex';
+          timerSelected = true;
         } else {
           timerLengthSetting.style.display = 'none';
+          timerSelected = false;
         }
         break;
 
@@ -76,6 +80,18 @@ const changeSetting = () => {
         break;
     }
   }
+
+  // If the user selects one or more computer players, disable the timer but
+  // keep track of if the user had timer enabled before
+  if (darkPlayerType === 'computer' || lightPlayerType === 'computer') {
+    timer = false;
+  } else {
+    if (timerSelected) {
+      timer = true;
+    }
+  }
+
+  displayTimerSettings();
 }
 
 // Add event listeners to each option

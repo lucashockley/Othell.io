@@ -66,6 +66,8 @@ const startGame = () => {
   // Stop current game from running
   if (game) {
     game.running = false;
+    darkTimerDisplay.innerHTML = '-';
+    lightTimerDisplay.innerHTML = '-';
     createCells();
   }
 
