@@ -1,3 +1,5 @@
+/* Style board to look like an eight by eight grid of cells */
+
 #board {
   display: grid;
   grid-template-columns: repeat(8, 60px);

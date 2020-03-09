@@ -22,6 +22,8 @@
   animation-name: flip-to-light;
 }
 
+/* Disk flip animations */
+
 @keyframes flip-to-dark {
   from {
     transform: scale(1, 1);
@@ -67,6 +69,8 @@
     stroke: var(--light-disk-stroke);
   }
 }
+
+/* Disk place animation */
 
 @keyframes place {
   from {

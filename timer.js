@@ -3,6 +3,7 @@ class Timer {
     // Allow a timer to reference it's parent game
     this.game = game;
 
+    // Set display to the HTML DOM element representing the timer
     this.display = side === 'dark' ? darkTimerDisplay : lightTimerDisplay;
 
     this.startLength = startLength;

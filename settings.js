@@ -81,8 +81,7 @@ const changeSetting = () => {
     }
   }
 
-  // If the user selects one or more computer players, disable the timer but
-  // keep track of if the user had timer enabled before
+  // If the user selects one or more computer players, disable the timer but keep track of if the user had timer enabled before
   if (darkPlayerType === 'computer' || lightPlayerType === 'computer') {
     timer = false;
   } else {

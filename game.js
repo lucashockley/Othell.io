@@ -31,28 +31,28 @@ class Game {
 
   static inBoardBoundary = (x, y) => x >= 0 && x < 8 && y >= 0 && y < 8;
 
-  static minimax = (position, move, depth, alpha, beta) => {
-    // If the maximum depth is reached, or there are no valid moves left, 
-    // return the static evaluation of the current position
-    if (depth === 0 || position.getValidMoves(position.turn).length === 0) {
+  // This is the Minimax algorithm that uses recursion to evaluate the bets possible move for a given position
+  static minimax = (currentBoardPosition, move, depth, alpha, beta) => {
+    // If the maximum depth is reached, or there are no valid moves left, return the static evaluation of the current position
+    if (depth === 0 || currentBoardPosition.getValidMoves(currentBoardPosition.turn).length === 0) {
       return {
-        evaluation: position.getStaticEvaluation(),
+        evaluation: currentBoardPosition.getStaticEvaluation(),
         move: move
       }
     }
 
     let bestEvaluation;
-    let moves = position.getValidMoves(position.turn);
+    let moves = currentBoardPosition.getValidMoves(currentBoardPosition.turn);
 
     for (const nextMove of moves) {
-      let nextPosition = position.copy();
-      nextPosition.move(nextMove.x, nextMove.y);
+      let nextBoardPosition = currentBoardPosition.copy();
+      nextBoardPosition.move(nextMove.x, nextMove.y);
 
       // Evaluate the new position
-      let newEvaluation = Game.minimax(nextPosition, nextMove, depth - 1, alpha, beta);
+      let newEvaluation = Game.minimax(nextBoardPosition, nextMove, depth - 1, alpha, beta);
 
       // Compare the new evaluation to the current best evaluation
-      if (position.turn === -1) {
+      if (currentBoardPosition.turn === -1) {
         if (!bestEvaluation || newEvaluation.evaluation > bestEvaluation.evaluation) {
           bestEvaluation = {
             evaluation: newEvaluation.evaluation,
@@ -132,15 +132,13 @@ class Game {
             let newX = x + dx;
             let newY = y + dy;
 
-            // Traverse the board in the direction of the disk until there is no disk of the
-            // opposite colour occupying the cell
+            // Traverse the board in the direction of the disk until there is no disk of the opposite colour occupying the cell
             while (Game.inBoardBoundary(newX, newY) && this.board[newX][newY].state === this.turn * -1) {
               newX += dx;
               newY += dy;
             }
 
-            // If the cell contains a disk of the current player's colour, traverse back to the target cell,
-            // flipping each disk to the current player's side
+            // If the cell contains a disk of the current player's colour, traverse back to the target cell, flipping each disk to the current player's side
             if (Game.inBoardBoundary(newX, newY) && this.board[newX][newY].state === this.turn) {
               while (this.board[newX - dx][newY - dy].state === this.turn * -1) {
                 this.flip(newX - dx, newY - dy);
@@ -174,8 +172,7 @@ class Game {
             let newX = x + dx;
             let newY = y + dy;
 
-            // Traverse the board in the direction of the disk until there is no disk of the
-            // opposite colour occupying the cell
+            // Traverse the board in the direction of the disk until there is no disk of the opposite colour occupying the cell
             while (Game.inBoardBoundary(newX, newY) && this.board[newX][newY].state === side * -1) {
               newX += dx;
               newY += dy;
