@@ -9,6 +9,30 @@ let timerSelected = false;
 let timer = false;
 let timerLength = 5;
 
+const timerEnableSetting = document.getElementById('timer-enabled');
+const timerLengthSetting = document.getElementById('timer-length');
+
+const displayTimerSettings = () => {
+  // If both players are human, show timer settings
+  if (darkPlayerType === 'user' && lightPlayerType === 'user') {
+    timerEnableSetting.style.display = 'flex';
+    if (timer) {
+      timerLengthSetting.style.display = 'flex';
+    }
+  } else {
+    timerEnableSetting.style.display = 'none';
+    timerLengthSetting.style.display = 'none';
+  }
+}
+
+const displayDifficultySettings = (side, settings) => {
+  if (side === 'computer') {
+    settings.style.display = 'flex';
+  } else {
+    settings.style.display = 'none';
+  }
+}
+
 // Set search depth
 const setDepth = (side, difficulty) => {
   switch (difficulty) {

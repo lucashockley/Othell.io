@@ -29,6 +29,7 @@ class Game {
     }];
   }
 
+  // Returns true if the indicies are within the board boundary
   static inBoardBoundary = (x, y) => x >= 0 && x < 8 && y >= 0 && y < 8;
 
   // This is the Minimax algorithm that uses recursion to evaluate the bets possible move for a given position

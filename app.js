@@ -5,30 +5,6 @@ const boardDisplay = document.getElementById('board');
 const darkTimerDisplay = document.getElementById('dark-timer');
 const lightTimerDisplay = document.getElementById('light-timer');
 
-const timerEnableSetting = document.getElementById('timer-enabled');
-const timerLengthSetting = document.getElementById('timer-length');
-
-const displayTimerSettings = () => {
-  // If both players are human, show timer settings
-  if (darkPlayerType === 'user' && lightPlayerType === 'user') {
-    timerEnableSetting.style.display = 'flex';
-    if (timer) {
-      timerLengthSetting.style.display = 'flex';
-    }
-  } else {
-    timerEnableSetting.style.display = 'none';
-    timerLengthSetting.style.display = 'none';
-  }
-}
-
-const displayDifficultySettings = (side, settings) => {
-  if (side === 'computer') {
-    settings.style.display = 'flex';
-  } else {
-    settings.style.display = 'none';
-  }
-}
-
 const createCells = () => {
   // Clear board  
   boardDisplay.innerHTML = '';
@@ -107,6 +83,12 @@ function gameOver() {
     information.innerHTML = `Light wins the game, beating dark ${lightCount} - ${darkCount}`;
   } else {
     information.innerHTML = 'The game is a draw';
+  }
+
+  if (darkCount === 0) {
+    information.innerHTML = 'Light wins the game, beating dark 64-0';
+  } else if (lightCount === 0) {
+    information.innerHTML = 'Dark wins the game, beating light 64-0';
   }
 
   if (game.timer) {
