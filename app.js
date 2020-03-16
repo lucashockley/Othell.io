@@ -5,9 +5,13 @@ const boardDisplay = document.getElementById('board');
 const darkTimerDisplay = document.getElementById('dark-timer');
 const lightTimerDisplay = document.getElementById('light-timer');
 
-const createCells = () => {
-  // Clear board  
+const clearBoardDisplay = () => {
   boardDisplay.innerHTML = '';
+}
+
+const createCells = () => {
+  // Clear board    
+  clearBoardDisplay();
 
   for (let i = 0; i < 8; i++) {
     for (let j = 0; j < 8; j++) {
@@ -38,19 +42,16 @@ const displayScore = () => {
   document.getElementById('light-score').innerHTML = game.getDiskCount().light;
 }
 
-const startGame = () => {
-  // Stop current game from running
+const resetBoard = () => {
   if (game) {
     game.running = false;
     darkTimerDisplay.innerHTML = '-';
     lightTimerDisplay.innerHTML = '-';
     createCells();
   }
+}
 
-  game = new DisplayGame(darkPlayerType, lightPlayerType, darkDifficulty.depth, lightDifficulty.depth, timer, timerLength);
-  game.displayScore();
-
-  // Reset history table
+const resetHistoryTable = () => {
   let headings = historyTable.firstElementChild;
   let firstRow = document.createElement('tr');
   firstRow.appendChild(document.createElement('td'));
@@ -58,14 +59,26 @@ const startGame = () => {
   historyTable.innerHTML = '';
   historyTable.appendChild(headings);
   historyTable.appendChild(firstRow);
+}
+
+const startGame = () => {
+  // Stop current game from running  
+  resetBoard();
+
+  game = new DisplayGame(darkPlayerType, lightPlayerType, darkDifficulty.depth, lightDifficulty.depth, timer, timerLength);
+  game.displayScore();
+
+  // Reset history table
+  resetHistoryTable();
 
   information.innerHTML = `Dark's turn to move`;
 }
 
 document.getElementById('start').addEventListener('click', startGame);
 
-// Called when user clicks on a move indicator
+// Function called when user clicks on a move indicator
 const selectMove = () => {
+  // Get coordinates of cell from event path
   let x = Number(event.path[2].id[0]);
   let y = Number(event.path[2].id[2]);
 
@@ -86,9 +99,9 @@ function gameOver() {
   }
 
   if (darkCount === 0) {
-    information.innerHTML = 'Light wins the game, beating dark 64-0';
+    information.innerHTML = 'Light wins the game, beating dark 64 - 0';
   } else if (lightCount === 0) {
-    information.innerHTML = 'Dark wins the game, beating light 64-0';
+    information.innerHTML = 'Dark wins the game, beating light 64 - 0';
   }
 
   if (game.timer) {

@@ -179,7 +179,7 @@ class Game {
               newY += dy;
             }
 
-            // If the new cell contains a disk of the current player's colour, the move is valid
+            // If the new cell contains a disk of the current player's colour, the move is valid and return true
             if (Game.inBoardBoundary(newX, newY) && this.board[newX][newY].state === side) {
               return true;
             }
